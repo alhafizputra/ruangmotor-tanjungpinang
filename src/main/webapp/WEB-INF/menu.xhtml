@@ -1,0 +1,41 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/avalon">
+
+    <div class="layout-menu-container" style="text-align: -moz-center; ">
+        <div class="nano">
+            <div class="nano-content menu-scroll-content" style="margin-right: 0 !important;">
+                <h:form style="width: 100%; max-width: 100%; text-align: -webkit-center;">
+                    <p:panel class="no-border no-padding" style="width: 1351px;">
+                        <div style="text-align: left">
+                            <pu:menu>
+                                <p:menuitem value="Dashboard" icon="fa fa-dashboard" outcome="/dashboard"/>
+                                <p:submenu label="Master" icon="fa fa-database">
+                                    <p:menuitem value="Kategori" icon="fa fa-database" outcome="/Master/kategori"/>
+                                    <p:menuitem value="Kota" icon="fa fa-database" outcome="/Master/kota"/>
+                                    <p:menuitem value="Data Barang" icon="fa fa-database" outcome="/Master/Barang/list"/>
+                                    <p:menuitem value="Data Pelanggan" icon="fa fa-database" outcome="/Master/Pelanggan/list"/>
+                                    <p:menuitem value="Data Karyawan" icon="fa fa-database" outcome="/Master/Karyawan/list"/>
+                                </p:submenu>
+                                <p:submenu label="Transaksi" icon="fa fa-shopping-cart">
+                                    <p:menuitem value="Transaksi" icon="fa fa-shopping-cart" outcome="/Transaksi/transaksi"/>
+                                    <p:menuitem value="Riwayat Transaksi" icon="fa fa-history" outcome="/Transaksi/riwayatTransaksi"/>
+                                </p:submenu>
+                                <p:submenu label="Laporan" icon="fa fa-table">
+                                    <p:menuitem value="Laporan Transaksi" icon="fa fa-table" outcome="/Laporan/laporanTransaksi"/>
+                                </p:submenu>
+                                <p:menuitem value="Keluar" icon="fa fa-sign-out" outcome="/index"/>
+                            </pu:menu>
+                        </div>
+                    </p:panel>
+                </h:form>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

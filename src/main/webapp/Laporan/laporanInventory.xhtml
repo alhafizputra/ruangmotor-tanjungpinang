@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel header="Laporan Inventory"
+                     style="width: 100%; height: 100%">
+                <p:panel class="no-border" style="width: 80%">
+                    <p:outputLabel value="Periode Laporan:" class="required-note"/>
+                    <p:panelGrid columns="4" columnClasses="ui-g-2, ui-g-4, ui-g-2, ui-g-4" style="width: 100%; margin-top: 2%;">
+                        <p:outputLabel value="Tanggal Awal" class="required-note"/>
+                        <p:calendar value="#{laporanMBean.tglAwal}" maxdate="#{now}" yearRange="c-80:c"
+                                    navigator="true" pattern="dd-MM-yyyy" showOn="button" required="true" mask="true"
+                                    requiredMessage="Hari harap dipilih" style="width: auto"/>
+                        <p:outputLabel value="Tanggal Akhir" class="required-note"/>
+                        <p:calendar value="#{laporanMBean.tglAkhir}" maxdate="#{now}" yearRange="c-80:c"
+                                    navigator="true" pattern="dd-MM-yyyy" showOn="button" required="true" mask="true"
+                                    requiredMessage="Hari harap dipilih" style="width: auto"/>
+                    </p:panelGrid>
+                    <p:separator/>
+                    <p:commandButton value="Tampilkan" actionListener="#{laporanMBean.tampilkan()}"
+                                     style="width: 20%; margin-top: 3%; margin-bottom: 1%" update="@form">
+                        <f:attribute name="laporan" value="inventory"/>
+                    </p:commandButton>
+                </p:panel>
+            </p:panel>
+        </h:form>
+
+        <p:dialog showEffect="fade" hideEffect="fade"
+                  showHeader="false" closable="false"
+                  position="center" id="idDialogCetak"
+                  header="Informasi" appendTo="@(body)"  
+                  widgetVar="showDialogCetak" 
+                  modal="true" width="auto" height="500px"
+                  responsive="true" resizable="false"
+                  style="overflow: auto;">
+            <h:form prependId="false" style="text-align: center">
+                <p:panel id="idPanel">
+                    <div style="text-align: left;">
+                        <img src="/resources/images/logo-pt-air.jpeg" style="width: 130px"/>
+                    </div>
+                    <div style="margin-top: -76px; text-align: center">
+                        <h1>RUANG MOTOR TANJUNG PINANG</h1>
+                    </div>
+                    <p:separator/>
+                    <p:panel class="no-border" style="text-align: center">
+                        <p:outputLabel value="Periode : " style="font-size: 14px; font-weight: bold"/>
+                        <p:outputLabel value="#{laporanMBean.tglAwal}" 
+                                       style="font-size: 14px; font-weight: bold">
+                            <f:convertDateTime type="date" dateStyle="long" locale="in_ID"/>  
+                        </p:outputLabel>
+                        <p:outputLabel value=" s/d " style="font-size: 14px; font-weight: bold"/>
+                        <p:outputLabel value="#{laporanMBean.tglAkhir}" 
+                                       style="font-size: 14px; font-weight: bold">
+                            <f:convertDateTime type="date" dateStyle="long" locale="in_ID"/>  
+                        </p:outputLabel>
+                    </p:panel>
+
+                    <p:panel style="width: 100%; text-align: center" header="Laporan Barang"
+                             class="card card-w-title ui-fluid">
+                        <br/>
+                        <style type="text/css">
+                            .tg  {border-collapse:collapse;border-spacing:0;}
+                            .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                            .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                            .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+                            .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+                        </style>
+                        <table class="tg" style="width: 100%; text-align: center">
+                            <tr>
+                                <th class="tg-0pky">Kode Barang</th>
+                                <th class="tg-0pky">Nama Barang</th>
+                                <th class="tg-0pky">Spesifikasi</th>
+                                <th class="tg-0pky">Harga Beli</th>
+                                <th class="tg-0pky">Harga Jual</th>
+                                <th class="tg-0pky">Stok</th>
+                                <th class="tg-0pky">Keterangan</th>
+                            </tr>
+                            <c:forEach items="#{laporanMBean.listBarang}" var="listBarang">
+                                <tr>
+                                    <td class="tg-0pky">#{listBarang.kodeBarang}</td>
+                                    <td class="tg-0pky">#{listBarang.namaBarang}</td>
+                                    <td class="tg-0pky">#{listBarang.spesifikasi}</td>
+                                    <td class="tg-0pky">#{listBarang.hargaJual}</td>
+                                    <td class="tg-0pky">#{listBarang.hargaBeli}</td>
+                                    <td class="tg-0pky">#{listBarang.stok}</td>
+                                    <td class="tg-0pky">#{listBarang.keterangan}</td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </p:panel>
+                    <div class="no-border" style="padding: 0; text-align: right;">
+                        <p:outputLabel value="Manajer Personalia" style="margin-right: 42px"/>
+                        <br/><br/><br/><br/><br/>
+                        <p:outputLabel value="Timotius Abineno" style="margin-right: 52px"/>
+                    </div>
+                </p:panel>
+                <p:panel class="no-border" style="width: 100%; text-align: center">
+                    <p:commandButton value="Cetak" style="max-width: 150px; margin-right: 10px" update="@form">
+                        <p:printer target="idPanel"/>
+                    </p:commandButton>
+                    <p:commandButton value="Tutup" style="max-width: 150px; margin-right: 10px" process="@this" update="@form"
+                                     onclick="PF('showDialogCetak').hide()"/>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

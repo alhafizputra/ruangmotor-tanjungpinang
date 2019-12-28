@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Ruang Motor Tanjung Pinang</title>
+        <h:outputScript name="js/layout.js" library="avalon-layout" />
+    </h:head>
+
+    <h:body styleClass="login-body">
+
+        <div>
+            <p:graphicImage name="/ruangmotor.jpg" library="images" style="width: 100%; margin-top: -100px;"/>
+        </div>        
+
+        <div class="card login-panel ui-fluid">
+
+            <div class="login-panel-content no-border" style="background-color: transparent; border-radius: 20px;">
+                <h:form prependId="false">
+                    <div style="margin: 10px">
+                        <div class="ui-g-12" style="text-align:center;">
+                            <h2 class="welcome-text" style="color: white">Selamat Datang</h2>
+                            <span class="guest-sign-in" style="color: white; font-size: 9pt;">di Aplikasi Inventory</span> <br/>
+                            <span class="guest-sign-in" style="color: white; font-size: 9pt;">RUANG MOTOR TANJUNG PINANG</span>
+                        </div>
+                        <div class="ui-g-12" style="text-align:left;">
+                            <h:panelGroup>
+                                <label class="login-label" style="color: white">#{msg.login_username}</label>
+                                <div class="login-input">
+                                    <p:inputText id="j_username" value="" />
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <div class="ui-g-12" style="text-align:left;">
+                            <h:panelGroup>
+                                <label class="login-label" style="color: white">#{msg.login_password}</label>
+                                <div class="login-input">
+                                    <p:password id="j_password" value="" />
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <div class="ui-g-12 ui-sm-6 ui-md-6">
+                            <p:outputLabel value="" style="color: red; font-weight: bold;"
+                                           rendered="false" />
+                            <p:commandButton icon="ui-icon-person" value="Log In" ajax="false" style="margin-top: 15px;"
+                                             actionListener="#{loginMBean.login()}"/>
+                            <div style="width: 300px; text-align: left; margin-top: 20px;">
+                                <p>Belum punya akun? <a href="register.xhtml?faces-redirect=true">Buat akun baru</a></p>
+                            </div>
+                        </div>
+
+
+                        <!--                        <div class="ui-g-12 ui-sm-6 ui-md-6" style="padding:12px;">
+                                                    <a href="#" class="forget-password">Forget Password?</a>
+                                                </div>-->
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+
+    <h:outputStylesheet name="css/layout-crimson.css" library="avalon-layout" />
+
+</html>

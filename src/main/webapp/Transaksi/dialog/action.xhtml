@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog showEffect="fade" hideEffect="fade"
+              position="center" id="idDialocAct"
+              header="Detail Transaksi" appendTo="@(body)"  
+              widgetVar="showDialocAct" 
+              modal="true" width="60%" height="95%"
+              responsive="true" resizable="false">
+        <h:form>
+            <p:panel class="no-border no-padding">
+                <p:panelGrid columns="2" columnClasses="ui-g-6,ui-g-6"
+                             style="width: 100%;">
+                    <p:panelGrid columns="3" columnClasses="ui-g-5,ui-g-1,ui-g-5"
+                                 style="width: 100%;">
+                        <p:outputLabel value="Nota"/>
+                        <p:outputLabel value=":"/>
+                        <p:outputLabel value="#{penjualanMBean.penjualan.notaJual}"/>
+                        <p:outputLabel value="Tanggal"/>
+                        <p:outputLabel value=":"/>
+                        <p:outputLabel value="#{penjualanMBean.penjualan.tglJual}">
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                        </p:outputLabel>
+                    </p:panelGrid>
+                    <p:panelGrid columns="3" columnClasses="ui-g-5,ui-g-1,ui-g-5"
+                                 style="width: 100%;">
+                        <p:outputLabel value="Pelanggan"/>
+                        <p:outputLabel value=":"/>
+                        <p:outputLabel value="#{penjualanMBean.penjualan.mstPelanggan.namaPelanggan}"/>
+                        <p:outputLabel value="Total Harga"/>
+                        <p:outputLabel value=":"/>
+                        <p:outputLabel value="#{penjualanMBean.penjualan.totalHarga}"/>
+
+                    </p:panelGrid>
+
+                </p:panelGrid>
+            </p:panel>
+            <br/>
+            <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                         value="#{penjualanMBean.listPenjualanDtl}" 
+                         rowIndexVar="rowIndex" lazy="true"
+                         emptyMessage="Data tidak ditemukan"
+                         tableStyle="table-layout: auto;">
+                <p:ajax event="filter"  global="false"/>
+                <p:column headerText="No" 
+                          exportable="false">
+                    <h:outputText value="#{rowIndex+1}"/>
+                </p:column>
+                <p:column headerText="Kode Barang"
+                          sortBy="#{list.kodeBarang}">
+                    <p:outputLabel value="#{list.kodeBarang}"/>
+                </p:column>
+                <p:column headerText="Nama Barang"
+                          sortBy="#{list.namaBarang}">
+                    <p:outputLabel value="#{list.namaBarang}"/>
+                </p:column>
+                <p:column headerText="Jumlah"
+                          sortBy="#{list.jumlahJual}" style="text-align: center;">
+                    <p:outputLabel value="#{list.jumlahJual}"/>
+                </p:column>
+                <p:column headerText="Sub Total"
+                          sortBy="#{list.subTotal}">
+                    <p:panel class="no-border no-padding-table no-padding" style="text-align: right; background-color: transparent;">
+                        <p:outputLabel value="#{list.subTotal}" style="text-align: right; ">
+                            <f:convertNumber type="currency"
+                                             currencySymbol="Rp"
+                                             maxFractionDigits="2"/>
+                        </p:outputLabel>
+                    </p:panel>
+                </p:column>
+            </p:dataTable>
+            <br/>
+            <p:panel class="no-border" style="text-align: center;">
+                <p:commandLink id="cetak" value="Cetak Ulang" ajax="false" target="_blank" 
+                               style="padding: .3em 1em; width: 150px;"
+                               styleClass="ui-button ui-widget ui-corner-all ui-button-text-only ui-button-text link-button"  
+                               actionListener="#{penjualanMBean.cetakTransaksi()}"/>
+            </p:panel>
+
+        </h:form>
+    </p:dialog>
+
+</ui:composition>

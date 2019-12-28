@@ -1,0 +1,50 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/avalon">
+    
+    <div class="topbar clearfix">
+        <div class="topbar-left">            
+            <p:graphicImage library="images" styleClass="topbar-logo" style="width: 200px; height: 43px; margin: 1px;"/>
+        </div>
+        <div class="topbar-right">
+            <!--<p:graphicImage name="images/it.png" library="avalon-layout" styleClass="topbar-logo" style="width: 190px"/>-->
+            <h1 id="idtext" class="topbar-items" style="font-family: sans-serif; 
+                color: #ffffff; font-weight: bold; margin-bottom: 50px; float: left; 
+                margin-left: 20px;">APLIKASI INVENTORY RUANG MOTOR TANJUNG PINANG</h1>
+
+            <a id="topbar-menu-button" href="#">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul class="topbar-items fadeInDown animated">
+                <ui:fragment rendered="#{request.remoteUser != null}">
+                    <li class="profile-item">
+                        <a href="#">
+                            <p:graphicImage name="images/avatar6.png" library="avalon-layout" styleClass="profile-image" style="border: 0 none"/>
+                            <div class="topbar-item-name" style="text-align: right;"> 
+                                #{menuMBean.userSession.name}
+                            </div>
+                        </a>
+                        <ul class="layout-menu animated">
+                            <li role="menuitem">
+                                <div style="padding: 10px; font-weight: bold;">
+                                    Selamat Datang!
+                                </div>
+                                <p:separator />
+                            </li>
+                            <li role="menuitem">
+                                <p:link title="Keluar" class="header-nav-overlay-item" href="/logout">
+                                    <i class="fa fa-sign-out fa-lg fa-fw" aria-hidden="true" />
+                                    <p:outputLabel value="Keluar" />
+                                </p:link>
+                            </li>
+                        </ul>
+                    </li>
+                </ui:fragment>
+            </ul>
+        </div>
+    </div>
+</ui:composition>

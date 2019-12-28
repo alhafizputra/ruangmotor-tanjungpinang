@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <ui:include src="dialog/action.xhtml"/>
+        <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel id="pDataKaryawan" header="Data Karyawan" class="card-w-title ui-fluid no-border"
+                     style="text-align: -webkit-center; text-align: -moz-center;">
+                <p:panelGrid columns="2" layout="grid" class="no-border" columnClasses="ui-g-3,ui-g-3">
+                    <p:commandButton value="Tambah" 
+                                     icon="fa fa-plus"
+                                     actionListener="#{karyawanMBean.showDialogAction}"/>
+                    <p:button value="Muat Ulang" 
+                              icon="fa fa-refresh"/>
+                </p:panelGrid>
+                
+                <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                             value="#{karyawanMBean.listKaryawan}" 
+                             paginator="true" paginatorPosition="bottom"
+                             currentPageReportTemplate="{currentPage} Dari {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} 
+                             {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             rowIndexVar="rowIndex" lazy="true"
+                             emptyMessage="Data tidak ditemukan"
+                             tableStyle="table-layout: auto;">
+                    <p:ajax event="filter"  global="false"/>
+                    <f:facet name="header">
+                        Daftar Karyawan
+                    </f:facet>
+                    <p:column headerText="No" 
+                              exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    <p:column headerText="Kode Karyawan"
+                              sortBy="#{list.kodeKaryawan}">
+                        <p:outputLabel value="#{list.kodeKaryawan}"/>
+                    </p:column>
+                    <p:column headerText="Nama Karyawan" 
+                              sortBy="#{list.namaKaryawan}">
+                        <p:outputLabel value="#{list.namaKaryawan}"/>
+                    </p:column>
+                    <p:column headerText="Jenis Kelamin"
+                              sortBy="#{list.jenisKelamin}">
+                        <p:outputLabel value="#{list.jenisKelamin}"/>
+                    </p:column>
+                    <p:column headerText="Kota"
+                              sortBy="#{list.kota.nama}">
+                        <p:outputLabel value="#{list.kota.nama}"/>
+                    </p:column>
+                    <p:column headerText="Telepon"
+                              sortBy="#{list.telepon}">
+                        <p:outputLabel value="#{list.telepon}"/>
+                    </p:column>
+                    <p:column headerText="Email"
+                              sortBy="#{list.email}">
+                        <p:outputLabel value="#{list.email}"/>
+                    </p:column>
+                    <p:column headerText="Alamat"
+                              sortBy="#{list.alamat}">
+                        <p:outputLabel value="#{list.alamat}"/>
+                    </p:column>
+                    <p:column headerText="Aksi" exportable="false" style="text-align: center;min-width: 14vw">
+                        <p:commandButton value="Ubah" style="max-width: 70px;margin-bottom: 5px;margin-top: 5px"
+                                         icon="fa fa-edit"
+                                         actionListener="#{karyawanMBean.showDialogAction}">
+                            <f:attribute name="karyawan" value="#{list}" />
+                        </p:commandButton>
+                        <p:commandButton value="Hapus" style="max-width: 80px" 
+                                         actionListener="#{karyawanMBean.deleteRecord}"
+                                         icon="fa fa-trash">
+                            <f:attribute name="karyawan" value="#{list}" />
+                            <p:confirm header="Konfirmasi" 
+                                       message="Apakah anda ingin menghapus data #{list.namaKaryawan} ?" 
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <p:commandButton value="Cetak" actionListener="#{karyawanMBean.showDialogCetak()}" process="@this"
+                                 style="width: 10%; margin-top: 1%; margin-bottom: 1%"/>
+                <br/>
+                <p:panel class="no-border" style="text-align: left; margin-top: -60px; background: none">
+                    <h3>Ekspor Data</h3>
+                    <h:commandLink>
+                        <p:graphicImage name="/images/excel.png" width="40"/>
+                        <p:dataExporter type="xls" target="idList" fileName="Daftar_Karyawan" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="/images/pdf.png" width="40"/>
+                        <p:dataExporter type="pdf" target="idList" fileName="Daftar_Karyawan" />
+                    </h:commandLink>
+                </p:panel>
+            </p:panel>
+        </h:form>
+
+        <p:dialog showEffect="fade" hideEffect="fade"
+                  showHeader="false" closable="false"
+                  position="center" id="idDialogCetak"
+                  header="Informasi" appendTo="@(body)"  
+                  widgetVar="showDialogCetak" 
+                  modal="true" height="auto"
+                  width="auto"
+                  responsive="true" resizable="false">
+            <h:form prependId="false" style="text-align: center">
+                <p:panel style="width: 100%; text-align: center" id="idPanel" header="Data Karyawan"
+                         class="card card-w-title ui-fluid">
+                    <br/>
+                    <style type="text/css">
+                        .tg  {border-collapse:collapse;border-spacing:0;}
+                        .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                        .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                        .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+                        .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+                    </style>
+                    <table class="tg" style="width: 100%; text-align: center">
+                        <tr>
+                            <th class="tg-0pky">Kode Karyawan</th>
+                            <th class="tg-0pky">Nama Karyawan</th>
+                            <th class="tg-0pky">Jenis Kelamin</th>
+                            <th class="tg-0pky">Alamat</th>
+                            <th class="tg-0pky">Kota</th>
+                            <th class="tg-0pky">Telepon</th>
+                            <th class="tg-0pky">Email</th>
+                        </tr>
+                        <c:forEach items="#{karyawanMBean.listKaryawan2}" var="listKaryawan2">
+                            <tr>
+                                <td class="tg-0pky">#{listKaryawan2.kodeKaryawan}</td>
+                                <td class="tg-0pky">#{listKaryawan2.namaKaryawan}</td>
+                                <td class="tg-0pky">#{listKaryawan2.jenisKelamin}</td>
+                                <td class="tg-0pky">#{listKaryawan2.alamat}</td>
+                                <td class="tg-0pky">#{listKaryawan2.kota.nama}</td>
+                                <td class="tg-0pky">#{listKaryawan2.telepon}</td>
+                                <td class="tg-0pky">#{listKaryawan2.email}</td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </p:panel>
+                <p:commandButton value="Cetak" style="max-width: 150px; margin-right: 10px" update="@form">
+                    <p:printer target="idPanel"/>
+                </p:commandButton>
+                <p:commandButton value="Tutup" style="max-width: 150px; margin-right: 10px" process="@this" update="@form"
+                                 onclick="PF('showDialogCetak').hide()"/>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

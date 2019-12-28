@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog showEffect="fade" hideEffect="fade"
+              position="center" id="idDialocAct"
+              header="#{pelangganMBean.dalogHeader}" appendTo="@(body)"  
+              widgetVar="showDialocAct" 
+              modal="true" width="40%" height="95%"
+              responsive="true" resizable="false">
+        <h:form>
+            <h:outputLabel value="* Wajib diisi" style="color: #ff0000"/>
+            <p:panel style="overflow: auto; width: 100% ; max-height: 55vh " 
+                     class="no-border">
+                <p:messages closable="true"/>
+                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
+                             style="width: 100%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:outputLabel value="Kode Pelanggan" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{pelangganMBean.mstPelanggan.kodePelanggan}"
+                                 required="true" requiredMessage="Kode Pelanggan tidak boleh kosong" 
+                                 style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
+                    <p:outputLabel value="Nama Pelanggan" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{pelangganMBean.mstPelanggan.namaPelanggan}"
+                                 required="true" requiredMessage="Nama Pelanggan tidak boleh kosong" 
+                                 style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
+                    <p:outputLabel value="Jenis Kelamin" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:selectOneRadio value="#{pelangganMBean.mstPelanggan.jenisKelamin}"
+                                      required="true" requiredMessage="Jenis Kelamin tidak boleh kosong" >
+                        <f:selectItem itemLabel="Laki-Laki" itemValue="P" />
+                        <f:selectItem itemLabel="Perempuan" itemValue="W"/>
+                    </p:selectOneRadio>
+                    <p:outputLabel value="Tanggal Lahir" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:calendar value="#{pelangganMBean.mstPelanggan.tglLahir}" 
+                                navigator="true" pattern="dd-MM-yyyy" mask="true" showOn="button"
+                                yearRange="c-80:c" maxdate="#{now}" 
+                                required="true" requiredMessage="Tanggal Lahir tidak boleh kosong" 
+                                style="width:18vw"/>
+                    <p:outputLabel value="Alamat" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{pelangganMBean.mstPelanggan.alamat}"
+                                 required="true" requiredMessage="Alamat tidak boleh kosong" 
+                                 style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
+                    <p:outputLabel value="Kota" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:selectOneMenu value="#{pelangganMBean.mstPelanggan.kota}"
+                                     required="true" requiredMessage="Kota tidak boleh kosong"
+                                     converter="PickListConverter">
+                        <f:selectItem itemValue="#{null}" itemLabel="PILIH KOTA" />
+                        <f:selectItems value="#{pelangganMBean.listKota}"
+                                       var="kota"
+                                       itemLabel="#{kota.nama}"
+                                       itemValue="#{kota}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Telepon" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{pelangganMBean.mstPelanggan.telepon}"
+                                 required="true" requiredMessage="Harga Jual tidak boleh kosong" 
+                                 style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
+                </p:panelGrid>
+            </p:panel>
+            <p:separator/>
+            <p:panelGrid columns="2" class="no-border" columnClasses="ui-g-6,ui-g-6">
+                <p:commandButton value="Simpan" 
+                                 icon="fa fa-save"
+                                 actionListener="#{pelangganMBean.saveRecord}"
+                                 update="@form"
+                                 process="@form"/>
+                <p:commandButton value="Tutup" process="@this"
+                                 icon="fa fa-close"
+                                 onclick="PF('showDialocAct').hide()"/>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>

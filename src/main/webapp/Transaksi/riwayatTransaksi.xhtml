@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <ui:include src="dialog/action.xhtml"/>
+        <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel id="pDataBarang" header="Riwayat Transaksi" class="card-w-title ui-fluid no-border"
+                     style="text-align: -webkit-center; text-align: -moz-center;">
+                <p:panelGrid columns="3" layout="grid" class="no-border" columnClasses="ui-g-1,ui-g-2,ui-g-2"
+                             style="text-align: left;">
+                    <p:outputLabel value="Nota"/>
+                    <p:inputText value="#{penjualanMBean.cariNotaJual}"/>
+                    <p:commandButton value="Cari" icon="fa fa-search" update="@form"
+                                     actionListener="#{penjualanMBean.cariPenjualanByNota()}"
+                                     style="width: 80px;"/>
+                </p:panelGrid>
+
+                <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                             value="#{penjualanMBean.listPenjualan}" 
+                             paginator="true" paginatorPosition="bottom"
+                             currentPageReportTemplate="{currentPage} Dari {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} 
+                             {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             rowIndexVar="rowIndex" lazy="true"
+                             emptyMessage="Data tidak ditemukan"
+                             tableStyle="table-layout: auto;"
+                             style="text-align: center;">
+                    <p:ajax event="filter"  global="false"/>
+                    <f:facet name="header">
+                        Daftar Transaksi
+                    </f:facet>
+                    <p:column headerText="No" 
+                              exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    <p:column headerText="Nota"
+                              sortBy="#{list.notaJual}">
+                        <p:outputLabel value="#{list.notaJual}"/>
+                    </p:column>
+                    <p:column headerText="Tanggal"
+                              sortBy="#{list.createdAt}">
+                        <p:outputLabel value="#{list.createdAt}"/>
+                    </p:column>
+                    <p:column headerText="Nama Pelanggan"
+                              sortBy="#{list.mstPelanggan.namaPelanggan}">
+                        <p:outputLabel value="#{list.mstPelanggan.namaPelanggan}"/>
+                    </p:column>
+                    <p:column headerText="Total Harga"
+                              sortBy="#{list.totalHarga}">
+                        <p:panel class="no-border no-padding-table no-padding" style="text-align: right; background-color: transparent;">
+                            <p:outputLabel value="#{list.totalHarga}">
+                                <f:convertNumber type="currency"
+                                                 currencySymbol="Rp"
+                                                 maxFractionDigits="2"/>
+                            </p:outputLabel>
+                        </p:panel>
+                    </p:column>
+
+                    <p:column headerText="Aksi" exportable="false" style="min-width: 11vw">
+                        <p:commandButton value="Lihat" style="max-width: 70px;margin-bottom: 5px;margin-top: 5px"
+                                         icon="fa fa-eye"
+                                         actionListener="#{penjualanMBean.showDialogAction()}">
+                            <f:attribute name="penjualan" value="#{list}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

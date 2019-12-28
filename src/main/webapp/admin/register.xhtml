@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel style="width: 50%; margin-top: 10px; width: 50%;" header="Tambah Pengguna">
+                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-8 "
+                             style="width: 100%; text-align: left"
+                             styleClass="ui-panelgrid-blank from-group">
+                    <h:outputText value="Nama Lengkap" />
+                    <h:outputText value=":" />
+                    <p:inputText style="width: 100%;" value="#{registrationController.newUser.namaLengkap}"/>
+                    <h:outputText value="Username" />
+                    <h:outputText value=":" />
+                    <p:inputText style="width: 100%;" value="#{registrationController.newUser.username}"/>
+                    <h:outputText value="Email" />
+                    <h:outputText value=":" />
+                    <p:inputText style="width: 100%;" value="#{registrationController.newUser.email}"/>
+                    <h:outputText value="Password" />
+                    <h:outputText value=":"/>
+                    <p:password id="pwd1" style="width: 100%;" autocomplete="new-password" match="pwd2" value="#{registrationController.newUser.password}"/>
+                    <h:outputText value="Ulangi Password" />
+                    <h:outputText value=":" />
+                    <p:password id="pwd2" style="width: 100%;" value="#{registrationController.newUser.passwordConfirm}"/>
+                </p:panelGrid>
+                <p:separator/>
+                <p:panelGrid style="width: 100%;"
+                             styleClass="ui-panelgrid-blank from-group">
+                    <p:commandButton value="Simpan" style="float: right" actionListener="#{registrationController.registration()}" update="@form"/>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

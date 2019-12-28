@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Ruang Motor Tanjung Pinang</title>
+        <h:outputScript name="js/layout.js" library="avalon-layout" />
+        <h:outputScript name="isNumberKey.js" library="js" />
+        <h:outputScript name="isAlphaKey.js" library="js" />
+    </h:head>
+
+    <h:body>    
+        <p:growl id="growl" showDetail="true" severity="info,warn"/>  
+        <h:form prependId="false" class="registration-form">
+            <p:panel id="idPanel" class="no-border registration-panel">
+                <p:panel id="titlePanel" class="no-border">
+                    <h2 class="welcome-text">Registration</h2>
+                </p:panel>
+                <p:messages class="error-message" closable="true" severity="error,fatal"/>
+                <p:panelGrid class="no-border" columns="1" columnClasses="ui-grid-col-12" layout="grid" style="text-align: center">
+                    <p:inputText id="mobileNumber" placeholder="No.HP (e.g. 6282112345678)" 
+                                 value="#{userController.newUser.noHp}" 
+                                 disabled="#{!userController.loginDisabled}"
+                                 onkeypress="return isNumberKey()(event)"
+                                 required="true" requiredMessage="No. HP harus diisi"/>
+                    <p:inputText id="firstName" placeholder="Nama Depan (e.g. Ari)" 
+                                 value="#{userController.newUser.namaDepan}" 
+                                 disabled="#{!userController.loginDisabled}"
+                                 onkeypress="return isAlphaKey()()(event)"
+                                 required="true" requiredMessage="Nama Depan harus diisi"/>
+                    <p:inputText id="lastName" placeholder="Nama Belakang (e.g. Silalahi)" 
+                                 value="#{userController.newUser.namaBelakang}" 
+                                 disabled="#{!userController.loginDisabled}"
+                                 onkeypress="return isAlphaKey()()(event)"
+                                 required="true" requiredMessage="Nama Belakang harus diisi"/>
+                    <p:panel class="no-border no-padding-table" style="text-align: left">
+                        <p:outputLabel value="Tanggal Lahir"/>
+                    </p:panel>
+                    <p:calendar class="calendar" placeholder="" showOn="button" maxdate="#{now}" yearRange="c-80:c"
+                                pattern="dd-MM-yyyy" mask="true" navigator="true"
+                                value="#{userController.newUser.tglLahir}" 
+                                disabled="#{!userController.loginDisabled}"/>
+                    <p:selectOneRadio value="#{userController.newUser.jenisKelamin}">
+                        <f:selectItem itemLabel="Laki-laki" itemValue="L" />
+                        <f:selectItem itemLabel="Perempuan" itemValue="P" />
+                    </p:selectOneRadio>
+                    <p:inputText id="email" placeholder="Email (e.g. arisilalahi@gmail.com)" 
+                                 value="#{userController.newUser.email}" 
+                                 disabled="#{!userController.loginDisabled}"
+                                 required="true" requiredMessage="Email harus diisi"/>
+                    <p:inputText id="username" placeholder="Username (e.g. ari94)" 
+                                 value="#{userController.newUser.username}" 
+                                 disabled="#{!userController.loginDisabled}"
+                                 required="true" requiredMessage="Email harus diisi"/>
+                    <p:password id="password" placeholder="Password" 
+                                value="#{userController.newUser.password}"
+                                disabled="#{!userController.loginDisabled}"
+                                required="true" requiredMessage="Password harus diisi"/>
+                </p:panelGrid>
+                <p:panelGrid class="no-border" columns="1" columnClasses="ui-grid-col-12" layout="grid"
+                             style="margin-top: 10px;">
+                    <p:commandButton value="Register" class="reg-btn" update="@form" actionListener="#{userController.register()}"
+                                     disabled="#{!userController.loginDisabled}"/>
+                    <p:commandButton value="Login" class="reg-btn" update="@form" disabled="#{userController.loginDisabled}"
+                                     action="/login.xhtml?faces-redirect=true"/>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:outputStylesheet name="css/app.css" />
+
+        <div class="footer"><p>©2019 | Ruang Motor Tanjung Pinang</p></div>
+    </h:body>
+
+    <h:outputStylesheet name="css/layout-crimson.css" library="avalon-layout" />
+
+</html>

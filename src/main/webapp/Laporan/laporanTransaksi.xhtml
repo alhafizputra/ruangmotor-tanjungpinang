@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel header="Laporan Penjualan"
+                     style="width: 100%; height: 100%">
+                <p:panel class="no-border" style="width: 80%">
+                    <p:outputLabel value="Periode Laporan:" class="required-note"/>
+                    <p:panelGrid columns="4" columnClasses="ui-g-2, ui-g-4, ui-g-2, ui-g-4" style="width: 100%; margin-top: 2%;">
+                        <p:outputLabel value="Tanggal Awal" class="required-note"/>
+                        <p:calendar value="#{penjualanMBean.tglDari}" maxdate="#{now}" yearRange="c-80:c"
+                                    navigator="true" pattern="dd-MM-yyyy" showOn="button" required="true" mask="true"
+                                    requiredMessage="Hari harap dipilih" style="width: auto"/>
+                        <p:outputLabel value="Tanggal Akhir" class="required-note"/>
+                        <p:calendar value="#{penjualanMBean.tglSampai}" maxdate="#{now}" yearRange="c-80:c"
+                                    navigator="true" pattern="dd-MM-yyyy" showOn="button" required="true" mask="true"
+                                    requiredMessage="Hari harap dipilih" style="width: auto"/>
+                    </p:panelGrid>
+                    <p:separator/>
+                    <p:commandLink id="cetak" value="Tampilkan" ajax="false" target="_blank" 
+                                   style="padding: .3em 1em; width: 150px;"
+                                   styleClass="ui-button ui-widget ui-corner-all ui-button-text-only ui-button-text link-button"  
+                                   actionListener="#{penjualanMBean.laporanTransaksi()}">
+                        <f:attribute name="laporan" value="penjualan"/>
+                    </p:commandLink>
+                </p:panel>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

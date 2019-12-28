@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog showEffect="fade" hideEffect="fade"
+              position="center" id="idDialocAct"
+              header="#{barangMBean.dalogHeader}" appendTo="@(body)"  
+              widgetVar="showDialocAct" 
+              modal="true" width="40%" height="95%"
+              responsive="true" resizable="false">
+        <h:form>
+            <p:growl id="idGrowl" showDetail="false"/>
+            <h:outputLabel value="* Wajib diisi" style="color: #ff0000"/>
+            <p:panel style="overflow: auto; width: 100% ; max-height: 55vh " 
+                     class="no-border">
+                <p:messages closable="true"/>
+                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
+                             style="width: 100%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:outputLabel value="Kode Barang" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.kodeBarang}"
+                                 required="true" requiredMessage="Kode Barang tidak boleh kosong" 
+                                 style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
+                    <p:outputLabel value="Nama Barang" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.namaBarang}"
+                                 required="true" requiredMessage="Nama Barang tidak boleh kosong" 
+                                 style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
+                    <p:outputLabel value="Kategori" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:selectOneMenu value="#{barangMBean.mstBarang.kategori}"
+                                     required="true" requiredMessage="Kategori tidak boleh kosong"
+                                     converter="PickListConverter">
+                        <f:selectItem itemValue="#{null}" itemLabel="PILIH KATEGORI" />
+                        <f:selectItems value="#{barangMBean.listKategori}"
+                                       var="kategori"
+                                       itemLabel="#{kategori.namaKategori}"
+                                       itemValue="#{kategori}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Harga Beli" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputNumber value="#{barangMBean.mstBarang.hargaBeli}"
+                                   required="true" requiredMessage="Harga Beli tidak boleh kosong" 
+                                   style="width:18vw"/>
+                    <p:outputLabel value="Harga Jual" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputNumber value="#{barangMBean.mstBarang.hargaJual}"
+                                   required="true" requiredMessage="Harga Jual tidak boleh kosong" 
+                                   style="width:18vw"/>
+                    <p:outputLabel value="Stok" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputNumber value="#{barangMBean.mstBarang.stok}"
+                                   required="true" requiredMessage="Stok tidak boleh kosong" 
+                                   style="width:18vw"/>
+                    <p:outputLabel value="Stok Minimal" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputNumber value="#{barangMBean.mstBarang.stok_minimal}"
+                                   required="true" requiredMessage="Stok Minimal tidak boleh kosong" 
+                                   style="width:18vw"/>
+                </p:panelGrid>
+            </p:panel>
+            <p:separator/>
+            <p:panelGrid columns="2" class="no-border" columnClasses="ui-g-6,ui-g-6">
+                <p:commandButton value="Simpan" 
+                                 icon="fa fa-save"
+                                 actionListener="#{barangMBean.saveRecord}"
+                                 update="@form"
+                                 process="@form"/>
+                <p:commandButton value="Tutup" process="@this"
+                                 icon="fa fa-close"
+                                 onclick="PF('showDialocAct').hide()"/>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
