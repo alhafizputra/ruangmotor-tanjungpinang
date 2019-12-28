@@ -1,3 +1,2 @@
 
 # ruangmotor-tanjungpinang
-# ruangmotor-tanjungpinang
