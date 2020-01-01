@@ -8,7 +8,7 @@
 	<queryString>
 		<![CDATA[SELECT
 tp.nota_jual as nota,
-tp.tgl_jual as tanggal,
+date_format(tp.tgl_jual, '%m/%d/%Y') as tanggal,
 tpd.nama_barang AS barang,
 tpd.jumlah_jual AS jumlah,
 mp.nama as pelanggan,
@@ -19,7 +19,7 @@ join mst_pelanggan mp on tp.mst_pelanggan_id = mp.id
 WHERE tp.tgl_jual BETWEEN STR_TO_DATE($P{TGL_AWAL},'%d-%m-%Y') AND STR_TO_DATE($P{TGL_AKHIR},'%d-%m-%Y');]]>
 	</queryString>
 	<field name="nota" class="java.lang.String"/>
-	<field name="tanggal" class="java.sql.Timestamp"/>
+	<field name="tanggal" class="java.lang.String"/>
 	<field name="barang" class="java.lang.String"/>
 	<field name="jumlah" class="java.lang.Integer"/>
 	<field name="pelanggan" class="java.lang.String"/>
@@ -34,7 +34,7 @@ WHERE tp.tgl_jual BETWEEN STR_TO_DATE($P{TGL_AWAL},'%d-%m-%Y') AND STR_TO_DATE($
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[TOKO FURNITURE JEPARA]]></text>
+				<text><![CDATA[RUANG MOTOR TANJUNG PINANG]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="223" y="43" width="61" height="20" uuid="c7a7de9e-5c79-4045-b82a-b2468c4c2f42"/>

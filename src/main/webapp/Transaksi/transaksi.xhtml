@@ -72,7 +72,7 @@
                                 <p:selectOneMenu value="#{list.mstBarang}"
                                                  required="true" requiredMessage="Barang tidak boleh kosong"
                                                  converter="PickListConverter">
-                                    <p:ajax listener="#{penjualanMBean.totalHarga()}" update="idList, idTotalHarga"/>
+                                    <p:ajax listener="#{penjualanMBean.totalHarga()}" update="idList, idTotalHarga, idJumlahJual"/>
                                     <f:selectItem itemValue="#{null}" itemLabel="PILIH BARANG" />
                                     <f:selectItems value="#{penjualanMBean.listBarang}"
                                                    var="barang"
@@ -81,8 +81,8 @@
                                 </p:selectOneMenu>
                             </p:column>
                             <p:column headerText="Jumlah" style="width: 100px;">
-                                <p:inputText value="#{list.jumlahJual}">
-                                    <p:ajax listener="#{penjualanMBean.totalHarga()}" update="idList, idTotalHarga"/>
+                                <p:inputText id="idJumlahJual" value="#{list.jumlahJual}" disabled="#{list.mstBarang == null ? true : false}">
+                                    <p:ajax event="keyup" listener="#{penjualanMBean.totalHarga()}" update="idList, idTotalHarga"/>
                                 </p:inputText>
                             </p:column>
                             <p:column headerText="Harga Satuan">
@@ -118,30 +118,51 @@
                                 </p:panel>
                             </p:panelGrid>
                         </p:panel>
-                        <!--                        <p:panel class="no-border no-padding" style="text-align: right;">
-                                                    <p:panelGrid class="no-border no-padding" columns="2" columnClasses="ui-g-9,ui-g-3"
-                                                                 style="width: 100%;">
-                                                        <p:outputLabel value="Bayar"/>
-                                                        <p:inputText value="{penjualanMBean.bayar}">
-                                                        </p:inputText>
-                                                        <p:outputLabel value="Kembali"/>
-                                                        <p:inputText value="{penjualanMBean.kembali}" disabled="true">
-                                                        </p:inputText>
-                                                    </p:panelGrid>
-                                                </p:panel>-->
+                        <p:panel class="no-border no-padding" style="float: right;">
+                            <p:panelGrid class="no-border" columns="1" columnClasses="ui-g-12"
+                                         style="width: 100%;"
+                                         rendered="#{penjualanMBean.penjualan.penjualanId != null ? false : true}">
+                                <p:commandButton id="btnSimpan" value="Simpan" icon="fa fa-save" 
+                                                 style="width: 140px; background-color: #008000e0;"
+                                                 actionListener="#{penjualanMBean.simpan()}" update="@form">
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel class="no-border no-padding" style="text-align: right; background-color: #83ef83;" 
+                                 rendered="#{penjualanMBean.penjualan.penjualanId != null ? true : false}">
+                            <p:outputLabel/>
+                            <p:panel class="no-border" 
+                                     style="background-color: transparent; color: #025398; text-align: right;">
+                                <p:outputLabel value="Jumlah Bayar = "/>
+                                <p:inputText value="#{penjualanMBean.bayar}" style="width: 90px">
+                                    <p:ajax listener="#{penjualanMBean.jumlahKembali()}" update="idKembali, preCetak"/>
+                                </p:inputText>  
+                            </p:panel>
+                            <p:outputLabel/>
+                            <p:panel class="no-border" 
+                                     style="background-color: transparent; color: #025398; text-align: right; margin-top: -10px;">
+                                <p:outputLabel value="Kembali = "/>
+                                <p:outputLabel id="idKembali" value="#{penjualanMBean.kembali != null ? penjualanMBean.kembali : '0'}" 
+                                               style="font-weight: bold">
+                                    <f:convertNumber type="currency"
+                                                     currencySymbol="Rp"
+                                                     maxFractionDigits="2"/>
+                                </p:outputLabel>
+                            </p:panel>
+                        </p:panel>
                         <p:panel class="no-border no-padding" style="float: right;">
                             <p:panelGrid class="no-border" columns="1" columnClasses="ui-g-12"
                                          style="width: 100%;">
-                                <p:commandLink id="cetak" value="Cetak" ajax="false" target="_blank" 
+                                <p:commandButton id="preCetak" value="Cetak" ajax="false" process="@this" disabled="#{penjualanMBean.disabledSimpan}"
+                                                 actionListener="#{penjualanMBean.preCetak()}"
+                                                 rendered="#{penjualanMBean.penjualan.penjualanId != null ? true : false}"
+                                                 >
+                                </p:commandButton>
+                                <p:commandLink id="cetak" value="Cetak" ajax="false" target="_blank" process="@this"
                                                style="padding: .3em 1em; width: 150px; display: none"
                                                styleClass="ui-button ui-widget ui-corner-all ui-button-text-only ui-button-text link-button"  
                                                actionListener="#{penjualanMBean.cetakTransaksi()}"
                                                />
-                                <p:commandButton value="Simpan" icon="fa fa-save" 
-                                                 style="width: 140px; background-color: #008000e0;"
-                                                 actionListener="#{penjualanMBean.simpan()}" update="@form">
-                                    <p:ajax event="click" update="@form" delay="8000" listener="#{penjualanMBean.reload()}"/>
-                                </p:commandButton>
                             </p:panelGrid>
                         </p:panel>
                     </p:panelGrid>

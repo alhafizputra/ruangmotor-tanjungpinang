@@ -6,6 +6,8 @@
 package ruangmotor.app.web.util;
 
 import java.io.Serializable;
+import java.nio.file.attribute.UserPrincipal;
+import java.security.Principal;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -13,6 +15,11 @@ import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import ruangmotor.app.model.User;
+import ruangmotor.app.service.UserService;
 
 /**
  * Extends this class for all the ManagedBean classes that handles menu view.
@@ -23,6 +30,13 @@ import org.slf4j.LoggerFactory;
  * @author Randy
  */
 public abstract class AbstractManagedBean implements Serializable {
+
+    @Autowired
+    private UserService userService;
+
+    User currentUser;
+
+    Principal principal;
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -73,4 +87,13 @@ public abstract class AbstractManagedBean implements Serializable {
         return map.get(name);
     }
 
+    public User getCurrentUser() {
+//        System.out.println("getCurrentUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        System.out.println("auth principal : " + auth.getPrincipal());
+//        System.out.println("auth name : " + auth.getName());
+        User user = userService.findByUsername(auth.getName());
+//        System.out.println("user : " + user);
+        return user;
+    }
 }

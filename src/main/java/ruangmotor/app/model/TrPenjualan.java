@@ -57,6 +57,7 @@ public class TrPenjualan {
     private String notaJual;
 
     @Column(name = "tgl_jual")
+    @Temporal(TemporalType.DATE)
     private Date tglJual;
 
     @JoinColumn(name = "mst_pelanggan_id", referencedColumnName = "id")

@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <ui:include src="dialog/action.xhtml"/>
+        <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel id="pDataUser" header="Data User" class="card-w-title ui-fluid no-border"
+                     style="text-align: -webkit-center; text-align: -moz-center;">
+                <p:panelGrid columns="2" layout="grid" class="no-border" columnClasses="ui-g-3,ui-g-3">
+                    <p:commandButton value="Tambah" 
+                                     icon="fa fa-plus"
+                                     actionListener="#{userController.showDialogAction}"/>
+                    <p:button value="Muat Ulang" 
+                              icon="fa fa-refresh"/>
+                </p:panelGrid>
+
+                 <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                             value="#{userController.listUser2}" 
+                              paginator="true" paginatorPosition="bottom"
+                             currentPageReportTemplate="{currentPage} Dari {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} 
+                             {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             rowIndexVar="rowIndex" lazy="true"
+                             emptyMessage="Data tidak ditemukan"
+                             tableStyle="table-layout: auto;">
+                    <p:ajax event="filter"  global="false"/>
+                    <f:facet name="header">
+                        Daftar User
+                    </f:facet>
+                    <p:column headerText="No" 
+                              exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    <p:column headerText="Nama Depan">
+                        <p:outputLabel value="#{list.namaDepan}"/>
+                    </p:column>
+                    <p:column headerText="Nama Belakang" >
+                        <p:outputLabel value="#{list.namaBelakang}"/>
+                    </p:column>
+                    <p:column headerText="Nama Lengkap" >
+                        <p:outputLabel value="#{list.namaLengkap}"/>
+                    </p:column>
+                    <p:column headerText="Jenis Kelamin">
+                        <p:outputLabel value="#{list.jenisKelamin.equals('L') ? 'Laki-laki' : 'Perempuan'}"/>
+                    </p:column>
+                    <p:column headerText="Tanggal Lahir">
+                        <p:outputLabel value="#{list.tglLahir}">
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="No Hp">
+                        <p:outputLabel value="#{list.noHp}"/>
+                    </p:column>
+                    <p:column headerText="Username">
+                        <p:outputLabel value="#{list.username}"/>
+                    </p:column>
+                    <p:column headerText="Aksi" exportable="false" style="text-align: center;min-width: 14vw">
+                        <p:commandButton value="Ubah" style="max-width: 70px; margin-bottom: 5px;margin-top: 5px"
+                                         icon="fa fa-edit"
+                                         actionListener="#{userController.showDialogAction}">
+                            <f:attribute name="user" value="#{list}"/>
+                        </p:commandButton>
+                        <p:commandButton value="Hapus" style="max-width: 80px" 
+                                         actionListener="#{userController.deleteRecord()}"
+                                         icon="fa fa-trash">
+                            <f:attribute name="user" value="#{list}" />
+                            <p:confirm header="Konfirmasi" 
+                                       message="Apakah anda ingin menghapus data #{list.namaLengkap} ?" 
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

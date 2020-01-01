@@ -13,19 +13,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.web.WebAttributes;
 import ruangmotor.app.config.UserValidator;
 import ruangmotor.app.model.User;
+import ruangmotor.app.repo.UserRepository;
 import ruangmotor.app.service.UserService;
 import ruangmotor.app.web.util.AbstractManagedBean;
 import static ruangmotor.app.web.util.AbstractManagedBean.showGrowl;
+import ruangmotor.app.web.util.LazyDataModelFilterJPA;
 
 /**
  *
@@ -38,38 +51,90 @@ public class UserController extends AbstractManagedBean implements InitializingB
 
     @Autowired
     private UserService userService;
-    private User newUser;
+    private User user;
+    private User userCek;
+    private LazyDataModelFilterJPA<User> listUser;
+    private List<User> listUser2;
+
+    @Autowired
+    private UserRepository userRepo;
 
     @Autowired
     private UserValidator userValidator;
 
     private boolean isLoginDisabled = true;
 
+    private String dalogHeader;
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        newUser = new User();
+        listUser2 = new ArrayList<>();
+        listUser2 = userRepo.findAllByStatus(User.Status.ACTIVE);
+        User user = getCurrentUser();
+        System.out.println("user : " + user.getNamaLengkap());
+//        listUser = new LazyDataModelFilterJPA(userRepo) {
+//            @Override
+//            protected Page getDatas(PageRequest request, Map filters) {
+//                user.setNamaLengkap((String) filters.get("namaLengkap"));
+//                return userRepo.findAll(whereQuery(), request);
+//            }
+//
+//            @Override
+//            protected long getDataSize(Map filters) {
+//                user.setNamaLengkap((String) filters.get("namaLengkap"));
+//                return userRepo.count(whereQuery());
+//            }
+//        };
     }
 
-    public void register() {
-        System.out.println("newUser : " + newUser);
+//    public Specification<User> whereQuery() {
+//        List<Predicate> predicates = new ArrayList<>();
+//        return new Specification<User>() {
+//            @Override
+//            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//                if (StringUtils.isNotBlank(user.getNamaLengkap())) {
+//                    predicates.add(cb.like(cb.lower(root.<String>get("id")),
+//                            getLikePattern(user.getNamaLengkap())));
+//                }
+//                
+//                query.orderBy(cb.asc(root.<Integer>get("userId")));
+//                return andTogether(predicates, cb);
+//            }
+//
+//        };
+//    }
+//    private Predicate andTogether(List<Predicate> predicates, CriteriaBuilder cb) {
+//        return cb.and(predicates.toArray(new Predicate[0]));
+//    }
+//
+//    private String getLikePattern(String searchTerm) {
+//        return new StringBuilder("%")
+//                .append(searchTerm.toLowerCase().replaceAll("\\*", "%"))
+//                .append("%")
+//                .toString();
+//    }
+    public void register() throws IOException {
+        System.out.println("user : " + user);
 
         String phoneNoPattern = "(62)[\\s\\)\\-]*(\\s|(\\d){3,})";
-        
-        if (!newUser.getNoHp().matches(phoneNoPattern)) {
+
+        if (!user.getNoHp().matches(phoneNoPattern)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter valid Indonesian phone number", ""));
             return;
         }
 
-        if (userService.findByUsername(newUser.getEmail()) != null) {
+        if (userService.findByUsername(user.getUsername()) != null) {
             showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Username sudah pernah terdaftar");
-        } else if (userService.findByEmail(newUser.getEmail()) != null) {
+        } else if (userService.findByEmail(user.getEmail()) != null) {
             showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Email sudah pernah terdaftar");
         } else {
-            newUser.setNamaLengkap(newUser.getNamaDepan().concat(" ").concat(newUser.getNamaBelakang()));
-            userService.save(newUser);
-            newUser = new User();
+            user.setNamaLengkap(user.getNamaDepan().concat(" ").concat(user.getNamaBelakang()));
+            userService.save(user);
+            user = new User();
             showGrowl(FacesMessage.SEVERITY_INFO, "Success", "Registrasi user berhasil");
             isLoginDisabled = false;
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
         }
         RequestContext.getCurrentInstance().update("growl");
     }
@@ -91,5 +156,37 @@ public class UserController extends AbstractManagedBean implements InitializingB
 
         } catch (ServletException | IOException ex) {
         }
+    }
+
+    public void showDialogAction() {
+        userCek = (User) getRequestParam("user");
+        user = new User();
+        if (userCek == null) {
+            System.out.println("tambah");
+            dalogHeader = "Tambah User";
+        } else {
+            System.out.println("update");
+            dalogHeader = "Ubah User";
+            user = userCek;
+        }
+        RequestContext.getCurrentInstance().reset("idDialocAct");
+        RequestContext.getCurrentInstance().update("idDialocAct");
+        RequestContext.getCurrentInstance().execute("PF('showDialocAct').show()");
+    }
+    
+    public void deleteRecord() throws InterruptedException, IOException {
+        userCek = (User) getRequestParam("user");
+        System.out.println("userCek : " + userCek);
+        userCek.setStatus(User.Status.INACTIVE);
+        userRepo.save(userCek);
+        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil dihapus");
+        RequestContext.getCurrentInstance().update("idList");
+        RequestContext.getCurrentInstance().update("growl");
+        reload();
+    }
+
+    public void reload() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
     }
 }

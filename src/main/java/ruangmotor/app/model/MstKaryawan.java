@@ -73,4 +73,22 @@ public class MstKaryawan {
     @Column(name = "status", length = 10)
     @Enumerated(EnumType.STRING)
     private MstKaryawan.Status status = MstKaryawan.Status.ACTIVE;
+
+    public MstKaryawan() {
+    }
+
+    
+    
+    public MstKaryawan(String kodeKaryawan, String namaKaryawan, String alamat, String jenisKelamin, String telepon, Kota kota, String email, Date createdAt) {
+        this.kodeKaryawan = kodeKaryawan;
+        this.namaKaryawan = namaKaryawan;
+        this.alamat = alamat;
+        this.jenisKelamin = jenisKelamin;
+        this.telepon = telepon;
+        this.kota = kota;
+        this.email = email;
+        this.createdAt = createdAt;
+    }
+    
+    
 }

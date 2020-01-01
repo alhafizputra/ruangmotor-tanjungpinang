@@ -90,20 +90,23 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     @Autowired
     private DataSource dataSource;
 
-//    private Integer bayar;
-//    private Integer kembali;
+    private Integer total = 0;
+    private Integer bayar = 0;
+    private Integer kembali = 0;
+
+    private Boolean disabledSimpan = true;
+
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public void init() {
         penjualan = new TrPenjualan();
         penjualanDtl = new TrPenjualanDtl();
+        barang = new MstBarang();
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         listPenjualan = penjualanRepo.findAllByStatus(TrPenjualan.Status.ACTIVE);
-        String tgl = dateFormat.format(new Date());
-        System.out.println("tgl : " + tgl);
         TrPenjualan pPenjualan = penjualanRepo.findTop1ByStatusOrderByPenjualanIdDesc(TrPenjualan.Status.ACTIVE);
 //        System.out.println("pPenjualan : " + pPenjualan);
         Integer nextPenjualanId = pPenjualan != null ? pPenjualan.getPenjualanId() + 1 : 1;
@@ -117,11 +120,11 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
         penjualan.setNotaJual(notaJual);
         penjualan.setTglJual(new Date());
 
-        listBarang = barangRepo.findAll();
-        listPelanggan = pelangganRepo.findAll();
+        listBarang = barangRepo.findAllByStatusOrderByNamaBarangAsc(MstBarang.Status.ACTIVE);
+        listPelanggan = pelangganRepo.findAllByStatusOrderByNamaPelangganAsc(MstPelanggan.Status.ACTIVE);
 
         listPenjualanDtl = new ArrayList<>();
-        System.out.println("penjualanDtl : " + penjualanDtl);
+//        System.out.println("penjualanDtl : " + penjualanDtl);
         listPenjualanDtl.add(penjualanDtl);
     }
 
@@ -160,13 +163,12 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
         penjualan.setStatus(TrPenjualan.Status.ACTIVE);
         penjualan = penjualanRepo.save(penjualan);
         System.out.println("penjualan : " + penjualan);
+//        for (TrPenjualanDtl pd : listPenjualanDtl) {
+//            barang = pd.getMstBarang();
+//            barang.setStok(barang.getStok() - pd.getJumlahJual());
+//            barangRepo.save(barang);
+//        }
         penjualanDtlRepo.save(listPenjualanDtl);
-        MstBarang msB;
-        for (TrPenjualanDtl pd : listPenjualanDtl) {
-            msB = pd.getMstBarang();
-            msB.setStok(msB.getStok() - pd.getJumlahJual());
-            barangRepo.save(msB);
-        }
         System.out.println("selesai..");
 
 //        for (TrPenjualanDtl pjd : listPenjualanDtl) {
@@ -175,10 +177,22 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Transaksi Berhasil");
         RequestContext.getCurrentInstance().update("idList");
         RequestContext.getCurrentInstance().update("growl");
-        click();
+//        click();
 //        init();
 //        listPenjualanDtl = new ArrayList<>();
 //        reload();
+    }
+
+    public void preCetak() {
+        System.out.println("listPenjualanDtl : " + listPenjualanDtl);
+        for (TrPenjualanDtl pd : listPenjualanDtl) {
+            barang = pd.getMstBarang();
+            barang.setStok(barang.getStok() - pd.getJumlahJual());
+            barangRepo.save(barang);
+        }
+        System.out.println("totalHarga : " + total);
+        System.out.println("bayar : " + bayar);
+        click();
     }
 
     public void cetak() {
@@ -198,8 +212,8 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     public void totalHarga() {
         //cek stok minimal
         if (penjualanDtl.getJumlahJual() != null) {
-            System.out.println("stok minimal : " + penjualanDtl.getMstBarang().getStok_minimal());
-            System.out.println("stok setelah dikurang : " + (penjualanDtl.getMstBarang().getStok() - penjualanDtl.getJumlahJual()));
+//            System.out.println("stok minimal : " + penjualanDtl.getMstBarang().getStok_minimal());
+//            System.out.println("stok setelah dikurang : " + (penjualanDtl.getMstBarang().getStok() - penjualanDtl.getJumlahJual()));
             if ((penjualanDtl.getMstBarang().getStok() - penjualanDtl.getJumlahJual()) < penjualanDtl.getMstBarang().getStok_minimal()) {
                 showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Stok tersisa tidak boleh kurang dari jumlah stok minimal");
                 RequestContext.getCurrentInstance().update("idList");
@@ -210,7 +224,7 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
         }
 
         Integer subTotal = 0;
-        Integer totalHarga = 0;
+        total = 0;
         if (penjualanDtl != null && penjualanDtl.getMstBarang() != null) {
             penjualanDtl.setHargaSatuan(penjualanDtl.getMstBarang().getHargaJual());
             penjualanDtl.setKodeBarang(penjualanDtl.getMstBarang().getKodeBarang());
@@ -220,12 +234,23 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
                 subTotal = penjualanDtl.getJumlahJual() * penjualanDtl.getHargaSatuan();
                 penjualanDtl.setSubTotal(BigInteger.valueOf(subTotal));
                 for (TrPenjualanDtl pd : listPenjualanDtl) {
-                    totalHarga += pd.getSubTotal().intValue();
+                    total += pd.getSubTotal().intValue();
                 }
-                penjualan.setTotalHarga(BigInteger.valueOf(totalHarga));
+                penjualan.setTotalHarga(BigInteger.valueOf(total));
             }
         }
 //        System.out.println("subtotal : " + subTotal);
+    }
+
+    public void jumlahKembali() {
+        if (bayar < total) {
+            showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Jumlah bayar kurang dari total harga");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            return;
+        }
+        kembali = bayar - total;
+        disabledSimpan = false;
     }
 
     public void tambahBaris() {
@@ -315,6 +340,8 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void cetakTransaksi() throws ClassNotFoundException, SQLException, JRException, IOException {
+        System.out.println("totalHarga : " + total);
+        System.out.println("bayar : " + bayar);
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
@@ -325,8 +352,12 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
 //            System.out.println("penjualan jasper : " + penjualan);
             HashMap hm = new HashMap();
             hm.put(JRParameter.REPORT_LOCALE, new java.util.Locale("id"));
-            hm.put("PENJUALAN_ID", penjualan.getPenjualanId().toString());
             System.out.println("PENJUALAN_ID : " + penjualan.getPenjualanId());
+            hm.put("PENJUALAN_ID", penjualan.getPenjualanId().toString());
+            System.out.println("BAYAR : " + bayar.toString());
+            hm.put("BAYAR", bayar.toString());
+            System.out.println("KEMBALI : " + kembali.toString());
+            hm.put("KEMBALI", kembali.toString());
 
             String jrxml = "/Reports/cetak_transaksi.jrxml";
             FacesContext facescontext = FacesContext.getCurrentInstance();
@@ -379,9 +410,9 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
             hm.put(JRParameter.REPORT_LOCALE, new java.util.Locale("id"));
 
             hm.put("TGL_AWAL", tglDariStr);
-            System.out.println("dari : {}" + tglDariStr);
+            System.out.println("dari : " + tglDariStr);
             hm.put("TGL_AKHIR", tglSampaiStr);
-            System.out.println("sampai : {}" + tglSampaiStr);
+            System.out.println("sampai : " + tglSampaiStr);
             String jrxml = "/Reports/laporan_transaksi.jrxml";
             FacesContext facescontext = FacesContext.getCurrentInstance();
             ExternalContext ext = facescontext.getExternalContext();

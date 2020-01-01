@@ -54,5 +54,17 @@ public class Kota {
     @Column(name = "status", length = 10)
     @Enumerated(EnumType.STRING)
     private Kota.Status status = Kota.Status.ACTIVE;
+
+    public Kota() {
+    }
+
+    
+    
+    public Kota(String nama, String kode, Date createdAt) {
+        this.nama = nama;
+        this.kode = kode;
+        this.createdAt = createdAt;
+    }
+    
     
 }

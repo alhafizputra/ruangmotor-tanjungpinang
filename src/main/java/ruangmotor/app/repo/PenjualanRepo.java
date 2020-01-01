@@ -33,4 +33,6 @@ public interface PenjualanRepo extends JpaRepository<TrPenjualan, Integer>, JpaS
     public List<TrPenjualan> listPenjualan(Date tglAwal, Date tglAkhir);
 
     public List<TrPenjualan> findAllByStatus(TrPenjualan.Status status);
+
+    public Integer countByStatus(TrPenjualan.Status status);
 }

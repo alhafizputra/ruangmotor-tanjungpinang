@@ -75,4 +75,20 @@ public class MstBarang {
     @Enumerated(EnumType.STRING)
     private MstBarang.Status status = MstBarang.Status.ACTIVE;
 
+    public MstBarang() {
+    }
+    
+    public MstBarang(String kodeBarang, String namaBarang, Integer hargaBeli, Integer hargaJual, Integer stok, Integer stok_minimal, Kategori kategori, Date createdAt) {
+        this.kodeBarang = kodeBarang;
+        this.namaBarang = namaBarang;
+        this.hargaBeli = hargaBeli;
+        this.hargaJual = hargaJual;
+        this.stok = stok;
+        this.stok_minimal = stok_minimal;
+        this.kategori = kategori;
+        this.createdAt = createdAt;
+    }
+    
+    
+
 }

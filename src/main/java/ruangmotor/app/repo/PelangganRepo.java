@@ -16,14 +16,16 @@ import ruangmotor.app.model.MstPelanggan;
  * @author ruangmotor
  */
 public interface PelangganRepo extends JpaRepository<MstPelanggan, BigDecimal>, JpaSpecificationExecutor<MstPelanggan> {
-    
+
     public List<MstPelanggan> findAllByStatusOrderByNamaPelangganAsc(MstPelanggan.Status s);
-    
+
     public List<MstPelanggan> findAllByOrderByNamaPelangganAsc();
 
     public MstPelanggan findTop1ByNamaPelangganAndStatus(String namaPelanggan, MstPelanggan.Status s);
-    
+
     public MstPelanggan findTop1ByKodePelangganAndStatus(String kodePelanggan, MstPelanggan.Status s);
-    
+
     public MstPelanggan findTop1ByKodePelanggan(String kodePelanggan);
+
+    public Integer countByStatus(MstPelanggan.Status status);
 }

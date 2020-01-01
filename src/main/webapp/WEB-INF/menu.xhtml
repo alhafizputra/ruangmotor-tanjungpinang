@@ -21,6 +21,8 @@
                                     <p:menuitem value="Data Barang" icon="fa fa-database" outcome="/Master/Barang/list"/>
                                     <p:menuitem value="Data Pelanggan" icon="fa fa-database" outcome="/Master/Pelanggan/list"/>
                                     <p:menuitem value="Data Karyawan" icon="fa fa-database" outcome="/Master/Karyawan/list"/>
+                                    <p:menuitem value="Data User" icon="fa fa-database" outcome="/Master/User/list" 
+                                                rendered="#{userController.currentUser.role.name eq 'SUPERADMIN' ? true : false}"/>
                                 </p:submenu>
                                 <p:submenu label="Transaksi" icon="fa fa-shopping-cart">
                                     <p:menuitem value="Transaksi" icon="fa fa-shopping-cart" outcome="/Transaksi/transaksi"/>
@@ -29,7 +31,7 @@
                                 <p:submenu label="Laporan" icon="fa fa-table">
                                     <p:menuitem value="Laporan Transaksi" icon="fa fa-table" outcome="/Laporan/laporanTransaksi"/>
                                 </p:submenu>
-                                <p:menuitem value="Keluar" icon="fa fa-sign-out" outcome="/index"/>
+                                <p:menuitem value="Keluar" icon="fa fa-sign-out" outcome="/login"/>
                             </pu:menu>
                         </div>
                     </p:panel>

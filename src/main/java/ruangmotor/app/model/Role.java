@@ -34,9 +34,9 @@ public class Role {
     @NotBlank
     private String name;
 
-    @NotBlank
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+//    @NotBlank
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<User> users;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
@@ -46,6 +46,16 @@ public class Role {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
+
+    public Role() {
+    }
+
+    public Role(Long id, String name, Date createdAt, Date updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Role(String name) {
         this.name = name;
@@ -67,13 +77,13 @@ public class Role {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+//    public Set<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
 
     public Date getCreatedAt() {
         return createdAt;

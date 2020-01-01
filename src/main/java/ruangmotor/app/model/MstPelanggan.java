@@ -75,4 +75,22 @@ public class MstPelanggan {
     @Column(name = "status", length = 10)
     @Enumerated(EnumType.STRING)
     private MstPelanggan.Status status = MstPelanggan.Status.ACTIVE;
+
+    public MstPelanggan() {
+    }
+    
+    
+
+    public MstPelanggan(String kodePelanggan, String namaPelanggan, String jenisKelamin, Date tglLahir, String alamat, Kota kota, String telepon, Date createdAt) {
+        this.kodePelanggan = kodePelanggan;
+        this.namaPelanggan = namaPelanggan;
+        this.jenisKelamin = jenisKelamin;
+        this.tglLahir = tglLahir;
+        this.alamat = alamat;
+        this.kota = kota;
+        this.telepon = telepon;
+        this.createdAt = createdAt;
+    }
+    
+    
 }

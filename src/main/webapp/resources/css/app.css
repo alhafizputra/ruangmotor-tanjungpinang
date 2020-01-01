@@ -544,5 +544,35 @@ input.ui-state-disabled,
 }
 
 .calendar input {
-    min-width: 265px !important;
+    min-width: 245px !important;
+}
+
+.panel-dashboard {
+    height: 100px;
+    border-radius: 4px !important;
+    color: white;
+}
+
+#jml-barang {
+    /*background-image: linear-gradient(to right, #89eb89, #50f63c);*/
+    background-color: #007bff !important;
+    border: #007bff;
+}
+
+#jml-transaksi {
+    /*background-image: linear-gradient(to right, #89eb89, #50f63c);*/
+    background-color: #28a745 !important;
+    border: #28a745;
+}
+
+#jml-pelanggan {
+    /*background-image: linear-gradient(to right, #89eb89, #50f63c);*/
+    background-color: #fd7e14 !important;
+    border: #fd7e14;
+}
+
+#jml-karyawan {
+    /*background-image: linear-gradient(to right, #89eb89, #50f63c);*/
+    background-color: #6f42c1 !important;
+    border: #6f42c1
 }

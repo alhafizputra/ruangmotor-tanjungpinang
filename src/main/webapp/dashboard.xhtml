@@ -8,13 +8,49 @@
 
     <ui:define name="content">
         <h:form id="idForm" prependId="false">
-            <p:panel id="pDashboard" class="card-w-title ui-fluid no-border"
-                     style="text-align:left;">
-                <!--<p:chart type="bar" model="{barangMBean.listBarang2}"/>-->
-
-                <p:chart type="line" model="#{chartView.lineModel1}" style="height:300px"/>
-                <br /><br />
-                <p:chart type="bar" model="#{chartView.horizontalBarModel}" style="height:300px"/>
+            <!--            <p:panel id="pDashboard" class="card-w-title ui-fluid no-border"
+                                 style="text-align:left;">
+                            <p:chart type="bar" model="{barangMBean.listBarang2}"/>
+            
+                            <p:chart type="line" model="{chartView.lineModel1}" style="height:300px"/>
+                            <br /><br />
+                            <p:chart type="bar" model="{chartView.horizontalBarModel}" style="height:300px"/>
+                        </p:panel>-->
+            <p:panel id="pDashboard" class="no-border">
+                <p:panelGrid columns="4" columnClasses="ui-g-3, ui-g-3, ui-g-3, ui-g-3" style="width: 100%">
+                    <p:panel id="jml-barang" class="panel-dashboard panel-jml-barang no-border">
+                        <i class="fa fa-th-large fa-2x" style=""></i>
+                        <p:outputLabel value="Jumlah Barang" style="margin-left: 10px;"/>
+                        <br/>
+                        <div style="margin-top: 8px;">
+                            <p:outputLabel value="#{dashboardMBean.jumlahBarang}" style="font-size: x-large; "/>
+                        </div>
+                    </p:panel>
+                    <p:panel id="jml-transaksi" class="panel-dashboard panel-jml-barang no-border">
+                        <i class="fa fa-shopping-cart fa-2x" style=""></i>
+                        <p:outputLabel value="Jumlah Transaksi" style="margin-left: 10px;"/>
+                        <br/>
+                        <div style="margin-top: 8px;">
+                            <p:outputLabel value="#{dashboardMBean.jumlahTransaksi}" style="font-size: x-large; "/>
+                        </div>
+                    </p:panel>
+                    <p:panel id="jml-pelanggan" class="panel-dashboard panel-jml-barang no-border">
+                        <i class="fa fa-user-plus fa-2x" style=""></i>
+                        <p:outputLabel value="Jumlah Pelanggan" style="margin-left: 10px;"/>
+                        <br/>
+                        <div style="margin-top: 8px;">
+                            <p:outputLabel value="#{dashboardMBean.jumlahPelanggan}" style="font-size: x-large; "/>
+                        </div>
+                    </p:panel>
+                    <p:panel id="jml-karyawan" class="panel-dashboard panel-jml-barang no-border">
+                        <i class="fa fa-user fa-2x" style=""></i>
+                        <p:outputLabel value="Jumlah Karyawan" style="margin-left: 10px;"/>
+                        <br/>
+                        <div style="margin-top: 8px;">
+                            <p:outputLabel value="#{dashboardMBean.jumlahKaryawan}" style="font-size: x-large; "/>
+                        </div>
+                    </p:panel>
+                </p:panelGrid>
             </p:panel>
         </h:form>
     </ui:define>

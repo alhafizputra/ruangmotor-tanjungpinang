@@ -5,6 +5,7 @@ import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ruangmotor.app.model.Role;
 import ruangmotor.app.model.User;
 import ruangmotor.app.repo.RoleRepository;
 import ruangmotor.app.repo.UserRepository;
@@ -22,7 +23,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(new HashSet<>(roleRepository.findAll()));
+        Role role = roleRepository.findOne(2L);
+        user.setRole(role);
         userRepository.save(user);
     }
 

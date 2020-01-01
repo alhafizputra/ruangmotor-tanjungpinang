@@ -4,6 +4,8 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="PENJUALAN_ID" class="java.lang.String"/>
+	<parameter name="BAYAR" class="java.lang.String"/>
+	<parameter name="KEMBALI" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
 tp.nota_jual as nota,
@@ -302,7 +304,7 @@ WHERE tp.id = $P{PENJUALAN_ID};]]>
 	<columnFooter>
 		<band height="131" splitType="Stretch">
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="429" y="9" width="111" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="cc8ace27-324e-4fb0-a4e3-5fea217094d4"/>
+				<reportElement x="429" y="9" width="97" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="cc8ace27-324e-4fb0-a4e3-5fea217094d4"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -310,25 +312,69 @@ WHERE tp.id = $P{PENJUALAN_ID};]]>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top">
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Rp " + $F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="69" width="555" height="20" uuid="6e70c9e8-6930-407b-919b-afa748960702"/>
+				<reportElement x="0" y="100" width="555" height="20" uuid="6e70c9e8-6930-407b-919b-afa748960702"/>
 				<textElement textAlignment="Center">
 					<font isItalic="true"/>
 				</textElement>
 				<text><![CDATA[oO -- Terima Kasih Telah Berbelanja Dengan Kami -- Oo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="360" y="9" width="69" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="f58894e5-5ebd-4552-ad49-c874772aba98"/>
-				<textElement textAlignment="Center">
+				<reportElement x="388" y="9" width="41" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="f58894e5-5ebd-4552-ad49-c874772aba98"/>
+				<textElement textAlignment="Left">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="430" y="29" width="97" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="7175248e-86ef-4559-afb6-3a9a5e0777a8"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rp " + $P{BAYAR} + ".00"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="388" y="29" width="42" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="a274cc91-cc08-4db2-9182-d2415077f32d"/>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bayar]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="430" y="49" width="97" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="278f385b-ba01-4e4c-8622-83dae2e07410"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rp " + $P{KEMBALI}+ ".00"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="388" y="49" width="42" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="0ed3d87d-9bd5-493e-a53e-58601ba7e14b"/>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kembali]]></text>
 			</staticText>
 		</band>
 	</columnFooter>

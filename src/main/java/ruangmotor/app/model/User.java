@@ -23,12 +23,20 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
 public class User {
+    
+    public enum Status {
+        INACTIVE,
+        ACTIVE
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -56,14 +64,13 @@ public class User {
 
     @NotBlank
     private String noHp;
-    
+
     private Date tglLahir;
     private String jenisKelamin;
 
-    
-    @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @ManyToOne
+    private Role role;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
@@ -73,6 +80,29 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
+    
+    @Column(name = "status", length = 10)
+    @Enumerated(EnumType.STRING)
+    private User.Status status = User.Status.ACTIVE;
+
+    public User() {
+    }
+
+    public User(String username, String namaLengkap, String password, String passwordConfirm, String email, String namaDepan, String namaBelakang, String noHp, Date tglLahir, String jenisKelamin, Role role, Date createdAt, Date updatedAt) {
+        this.username = username;
+        this.namaLengkap = namaLengkap;
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
+        this.email = email;
+        this.namaDepan = namaDepan;
+        this.namaBelakang = namaBelakang;
+        this.noHp = noHp;
+        this.tglLahir = tglLahir;
+        this.jenisKelamin = jenisKelamin;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Long getId() {
         return id;
@@ -98,14 +128,13 @@ public class User {
         this.id = id;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
+//    public Set<Role> getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(Set<Role> roles) {
+//        this.roles = roles;
+//    }
     public String getUsername() {
         return username;
     }
@@ -185,7 +214,21 @@ public class User {
     public void setJenisKelamin(String jenisKelamin) {
         this.jenisKelamin = jenisKelamin;
     }
-    
-    
-    
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
 }

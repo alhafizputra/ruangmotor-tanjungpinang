@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog showEffect="fade" hideEffect="fade"
+              position="center" id="idDialocAct"
+              header="#{userController.dalogHeader}" appendTo="@(body)"  
+              widgetVar="showDialocAct" 
+              modal="true" width="40%" height="95%"
+              responsive="true" resizable="false">
+        <h:form>
+            <h:outputLabel value="* Wajib diisi" style="color: #ff0000"/>
+            <p:panel class="no-border registration-panel">
+                <p:messages closable="true"/>
+                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-2,ui-grid-col-6"
+                             style="width: 100%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:outputLabel value="No. HP" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText id="mobileNumber" placeholder="e.g. 6282112345678"
+                                 value="#{userController.user.noHp}" 
+                                 onkeypress="return isNumberKey()(event)"
+                                 required="true" requiredMessage="No. HP harus diisi"/>
+                    <p:outputLabel value="Nama Depan" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText id="firstName"
+                                 value="#{userController.user.namaDepan}" 
+                                 onkeypress="return isAlphaKey()()(event)"
+                                 required="true" requiredMessage="Nama Depan harus diisi"/>
+                    <p:outputLabel value="Nama Belakang" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText id="lastName"
+                                 value="#{userController.user.namaBelakang}" 
+                                 onkeypress="return isAlphaKey()()(event)"
+                                 required="true" requiredMessage="Nama Belakang harus diisi"/>
+                    <p:outputLabel value="Tanggal Lahir" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:panel class="no-border no-padding" style="width: 300px">
+                        <p:calendar class="calendar" showOn="button" maxdate="#{now}" yearRange="c-80:c"
+                                    pattern="dd-MM-yyyy" mask="true" navigator="true"
+                                    value="#{userController.user.tglLahir}"/>
+                    </p:panel>
+                    <p:outputLabel value="Jenis Kelamin" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:selectOneRadio value="#{userController.user.jenisKelamin}" style="width: 300px;">
+                        <f:selectItem itemLabel="Laki-laki" itemValue="L" />
+                        <f:selectItem itemLabel="Perempuan" itemValue="P" />
+                    </p:selectOneRadio>
+                    <p:outputLabel value="Email" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText id="email"
+                                 value="#{userController.user.email}" 
+                                 required="true" requiredMessage="Email harus diisi"/>
+                    <p:outputLabel value="Username" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText id="username"
+                                 value="#{userController.user.username}" 
+                                 required="true" requiredMessage="Username harus diisi"/>
+                    <p:outputLabel value="Password" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:password id="password"
+                                value="#{userController.user.password}"
+                                required="true" requiredMessage="Password harus diisi"/>
+                </p:panelGrid>
+            </p:panel>
+            <p:separator/>
+            <p:panelGrid columns="2" class="no-border" columnClasses="ui-g-6,ui-g-6">
+                <p:commandButton value="Simpan" 
+                                 icon="fa fa-save"
+                                 class="reg-btn" actionListener="#{userController.register()}"
+                                 update="@form, pDataUser"
+                                 process="@form">
+                    <p:ajax listener="#{userController.reload()}" delay="1000"/>
+                </p:commandButton>
+                <p:commandButton value="Tutup" process="@this"
+                                 icon="fa fa-close"
+                                 onclick="PF('showDialocAct').hide()"/>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>

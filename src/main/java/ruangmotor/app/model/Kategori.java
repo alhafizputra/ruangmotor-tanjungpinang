@@ -52,4 +52,15 @@ public class Kategori {
     @Column(name = "status", length = 10)
     @Enumerated(EnumType.STRING)
     private Kategori.Status status = Kategori.Status.ACTIVE;
+
+    public Kategori() {
+    }
+
+    
+    public Kategori(String namaKategori, Date createdAt) {
+        this.namaKategori = namaKategori;
+        this.createdAt = createdAt;
+    }
+    
+    
 }
