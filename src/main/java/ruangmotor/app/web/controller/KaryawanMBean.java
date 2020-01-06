@@ -50,15 +50,15 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
     private String kodeKaryawan;
     private String dalogHeader;
 
-    @Autowired
-    private KotaRepo kotaRepo;
-    private Kota kota;
-    private List<Kota> listKota;
+//    @Autowired
+//    private KotaRepo kotaRepo;
+//    private Kota kota;
+//    private List<Kota> listKota;
 
     public void init() {
         mstKaryawan = new MstKaryawan();
-        kota = new Kota();
-        listKota = kotaRepo.findAllByStatusOrderByNamaAsc(Kota.Status.ACTIVE);
+//        kota = new Kota();
+//        listKota = kotaRepo.findAllByStatusOrderByNamaAsc(Kota.Status.ACTIVE);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
                 mstKaryawan.setJenisKelamin((String) filters.get("jenisKelamin"));
                 mstKaryawan.setEmail((String) filters.get("email"));
                 mstKaryawan.setTelepon((String) filters.get("telepon"));
-                kota = (Kota) filters.get("kota");
+//                kota = (Kota) filters.get("kota");
                 return karyawanRepo.findAll(whereQuery(), request);
             }
 
@@ -87,7 +87,7 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
                 mstKaryawan.setJenisKelamin((String) filters.get("jenisKelamin"));
                 mstKaryawan.setEmail((String) filters.get("email"));
                 mstKaryawan.setTelepon((String) filters.get("telepon"));
-                kota = (Kota) filters.get("kota");
+//                kota = (Kota) filters.get("kota");
                 return karyawanRepo.count(whereQuery());
             }
         };
@@ -106,9 +106,9 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
                     predicates.add(cb.like(cb.lower(root.<String>get("kodeKaryawan")),
                             getLikePattern(mstKaryawan.getKodeKaryawan())));
                 }
-                if (kota != null && kota.getKotaId() != null) {
-                    predicates.add(cb.equal(root.<Kota>get("kota"), kota));
-                }
+//                if (kota != null && kota.getKotaId() != null) {
+//                    predicates.add(cb.equal(root.<Kota>get("kota"), kota));
+//                }
                 if (StringUtils.isNotBlank(mstKaryawan.getJenisKelamin())) {
                     predicates.add(cb.like(cb.lower(root.<String>get("jeniskelamin")),
                             getLikePattern(mstKaryawan.getJenisKelamin())));
@@ -181,14 +181,14 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
                     String email = mstKaryawan.getEmail();
                     String telepon = mstKaryawan.getTelepon();
                     String alamat = mstKaryawan.getAlamat();
-                    Kota kt = mstKaryawan.getKota();
+//                    Kota kt = mstKaryawan.getKota();
                     mstKaryawan = br;
                     mstKaryawan.setNamaKaryawan(namaKaryawan);
                     mstKaryawan.setJenisKelamin(jeniskelamin);
                     mstKaryawan.setEmail(email);
                     mstKaryawan.setTelepon(telepon);
                     mstKaryawan.setAlamat(alamat);
-                    mstKaryawan.setKota(kt);
+//                    mstKaryawan.setKota(kt);
                 }
             }
             mstKaryawan.setStatus(MstKaryawan.Status.ACTIVE);

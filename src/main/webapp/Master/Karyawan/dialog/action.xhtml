@@ -29,16 +29,6 @@
                     <p:inputText value="#{karyawanMBean.mstKaryawan.alamat}"
                                  required="true" requiredMessage="Alamat tidak boleh kosong" 
                                  style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
-                    <p:outputLabel value="Kota" class="req-mandatory"/><p:outputLabel value=":"/>
-                    <p:selectOneMenu value="#{karyawanMBean.mstKaryawan.kota}"
-                                     required="true" requiredMessage="Kota tidak boleh kosong"
-                                     converter="PickListConverter">
-                        <f:selectItem itemValue="#{null}" itemLabel="PILIH KOTA" />
-                        <f:selectItems value="#{karyawanMBean.listKota}"
-                                       var="kota"
-                                       itemLabel="#{kota.nama}"
-                                       itemValue="#{kota}"/>
-                    </p:selectOneMenu>
                     <p:outputLabel value="Jenis Kelamin" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:selectOneRadio value="#{karyawanMBean.mstKaryawan.jenisKelamin}"
                                       required="true" requiredMessage="Jenis Kelamin tidak boleh kosong" >

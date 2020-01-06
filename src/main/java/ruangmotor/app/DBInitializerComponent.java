@@ -14,6 +14,7 @@ import ruangmotor.app.model.Kota;
 import ruangmotor.app.model.MstBarang;
 import ruangmotor.app.model.MstKaryawan;
 import ruangmotor.app.model.MstPelanggan;
+import ruangmotor.app.model.MstSupplier;
 import ruangmotor.app.model.Role;
 import ruangmotor.app.model.User;
 import ruangmotor.app.repo.BarangRepo;
@@ -22,6 +23,7 @@ import ruangmotor.app.repo.KategoriRepo;
 import ruangmotor.app.repo.KotaRepo;
 import ruangmotor.app.repo.PelangganRepo;
 import ruangmotor.app.repo.RoleRepository;
+import ruangmotor.app.repo.SupplierRepo;
 import ruangmotor.app.repo.UserRepository;
 
 @Component
@@ -44,6 +46,8 @@ public class DBInitializerComponent implements CommandLineRunner {
     @Autowired
     PelangganRepo pelangganRepo;
     @Autowired
+    SupplierRepo supplierRepo;
+    @Autowired
     KaryawanRepo karyawanRepo;
 
     @Autowired
@@ -58,6 +62,7 @@ public class DBInitializerComponent implements CommandLineRunner {
         initlialiseBarang();
         initlialisePelanggan();
         initlialiseKaryawan();
+        initlialiseSupplier();
     }
 
     //initialises the DB with Roles
@@ -96,7 +101,7 @@ public class DBInitializerComponent implements CommandLineRunner {
         }
         return true;
     }
-    
+
     //initialises the DB with Kategori
     private boolean initlialiseKategori() {
         System.out.println("======initlialiseKategori======");
@@ -160,9 +165,9 @@ public class DBInitializerComponent implements CommandLineRunner {
         System.out.println("======initlialisePelanggan======");
         try {
             List<MstPelanggan> listPelanggan = new ArrayList<>();
-            listPelanggan.add(new MstPelanggan("P001", "PELANGGAN SATU", "L", new SimpleDateFormat("dd/MM/yyyy").parse("01/12/1998"), "JL. SUDIRMAN NO 49", kotaRepo.findTop1ByKode("JKT"), "6282147756435", new java.util.Date()));
-            listPelanggan.add(new MstPelanggan("P002", "PELANGGAN DUA", "L", new SimpleDateFormat("dd/MM/yyyy").parse("21/11/1998"), "JL. MURADI NO 22", kotaRepo.findTop1ByKode("SBY"), "6282146742324", new java.util.Date()));
-            listPelanggan.add(new MstPelanggan("P003", "PELANGGAN TIGA", "P", new SimpleDateFormat("dd/MM/yyyy").parse("02/06/1998"), "JL. IMAM BONJOL NO 34", kotaRepo.findTop1ByKode("PDG"), "6282147743523", new java.util.Date()));
+            listPelanggan.add(new MstPelanggan("P001", "PELANGGAN SATU", "L", new SimpleDateFormat("dd/MM/yyyy").parse("01/12/1998"), "JL. SUDIRMAN NO 49", "6282147756435", new java.util.Date()));
+            listPelanggan.add(new MstPelanggan("P002", "PELANGGAN DUA", "L", new SimpleDateFormat("dd/MM/yyyy").parse("21/11/1998"), "JL. MURADI NO 22", "6282146742324", new java.util.Date()));
+            listPelanggan.add(new MstPelanggan("P003", "PELANGGAN TIGA", "P", new SimpleDateFormat("dd/MM/yyyy").parse("02/06/1998"), "JL. IMAM BONJOL NO 34", "6282147743523", new java.util.Date()));
             pelangganRepo.save(listPelanggan);
             System.out.println("Success Initialising Pelanggan");
         } catch (Exception e) {
@@ -172,18 +177,36 @@ public class DBInitializerComponent implements CommandLineRunner {
         }
         return true;
     }
-    
+
     //initialises the DB with Karyawan
     private boolean initlialiseKaryawan() {
         System.out.println("======initlialiseKaryawann======");
         try {
             List<MstKaryawan> listKaryawan = new ArrayList<>();
-            listKaryawan.add(new MstKaryawan("K001", "KARYAWAN SATU", "JL. GATOT SUBROTO NO.30", "P", "6281296403848", kotaRepo.findTop1ByKode("SBY"), "karyawan01@gmail.com", new java.util.Date()));
-            listKaryawan.add(new MstKaryawan("K002", "KARYAWAN DUA", "JL. HARYONO NO.12", "L", "6282364584866", kotaRepo.findTop1ByKode("SBY"), "karyawan02@gmail.com", new java.util.Date()));
+            listKaryawan.add(new MstKaryawan("K001", "KARYAWAN SATU", "JL. GATOT SUBROTO NO.30", "P", "6281296403848", "karyawan01@gmail.com", new java.util.Date()));
+            listKaryawan.add(new MstKaryawan("K002", "KARYAWAN DUA", "JL. HARYONO NO.12", "L", "6282364584866", "karyawan02@gmail.com", new java.util.Date()));
             karyawanRepo.save(listKaryawan);
             System.out.println("Success Initialising Karyawan");
         } catch (Exception e) {
             System.out.println("Error Initialising Karyawan");
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    //initialises the DB with Supplier
+    private boolean initlialiseSupplier() {
+        System.out.println("======initlialiseSupplier======");
+        try {
+            List<MstSupplier> listSupplier = new ArrayList<>();
+            listSupplier.add(new MstSupplier("S001", "SUPPLIER SATU", "JL. SUDIRMAN NO 49", "6282147756435", "supplier01@gmail.com", new java.util.Date()));
+            listSupplier.add(new MstSupplier("S002", "SUPPLIER DUA", "JL. SENAYAN NO 23", "6281243565468", "supplier02@gmail.com", new java.util.Date()));
+            listSupplier.add(new MstSupplier("S003", "SUPPLIER TIGA", "JL. SUTOYO NO 9", "6282154674667", "supplier03@gmail.com", new java.util.Date()));
+            supplierRepo.save(listSupplier);
+            System.out.println("Success Initialising Supplier");
+        } catch (Exception e) {
+            System.out.println("Error Initialising Supplier");
             System.out.println(e.getMessage());
             return false;
         }

@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel header="Transaksi" class="card-w-title ui-fluid no-border"
+                     style="text-align: -webkit-center;">
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8"
+                             style="width: 100%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:panelGrid class="no-border" columns="1">
+                        <p:panel id="idPanelNota" header="Informasi Nota">
+                            <p:panelGrid class="no-border no-padding" columns="2" columnClasses="ui-g-4, ui-g-8"
+                                         style="width: 100%;">
+                                <p:outputLabel value="No. Nota"/>
+                                <p:inputText value="#{pemesananMBean.pemesanan.notaPesan}" disabled="true"/>
+                                <p:outputLabel value="Tanggal"/>
+                                <p:calendar value="#{pemesananMBean.pemesanan.tglPesan}" disabled="true"
+                                            navigator="true" pattern="dd-MM-yyyy" mask="true" showOn="button"
+                                            yearRange="c-80:c" maxdate="#{now}" 
+                                            required="true" requiredMessage="Tanggal Transaksi tidak boleh kosong" 
+                                            style="width:18vw"/>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="idPanelSupplier" header="Informasi Supplier">
+                            <p:panelGrid class="no-border no-padding" columns="2" columnClasses="ui-g-4, ui-g-8"
+                                         style="width: 100%;">
+                                <p:outputLabel value="Nama"/>
+                                <p:selectOneMenu value="#{pemesananMBean.pemesanan.mstSupplier}"
+                                                 required="true" requiredMessage="Supplier tidak boleh kosong"
+                                                 converter="PickListConverter">
+                                    <p:ajax update="idPanelSupplier"/>
+                                    <f:selectItem itemValue="#{null}" itemLabel="PILIH SUPPLIER" />
+                                    <f:selectItems value="#{pemesananMBean.listSupplier}"
+                                                   var="supplier"
+                                                   itemLabel="#{supplier.namaSupplier}"
+                                                   itemValue="#{supplier}"/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <p:panelGrid class="no-border no-padding" columns="2" columnClasses="ui-g-4, ui-g-8"
+                                         style="width: 100%;"
+                                         rendered="#{pemesananMBean.pemesanan.mstSupplier != null ? true : false}">
+                                <p:outputLabel value="Telepon"/>
+                                <p:outputLabel value="#{pemesananMBean.pemesanan.mstSupplier.telepon}"/>
+                                <p:outputLabel value="Email"/>
+                                <p:outputLabel value="#{pemesananMBean.pemesanan.mstSupplier.email}"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:panelGrid>
+                    <p:panelGrid class="no-border" columns="1" style="width: 100%;">
+                        <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                                     value="#{pemesananMBean.listPemesananDtl}"
+                                     rows="10"
+                                     rowIndexVar="rowIndex" lazy="true"
+                                     tableStyle="table-layout: auto;">
+                            <p:ajax event="filter" global="false" />
+                            <f:facet name="header">
+                                Detail Pemesanan
+                            </f:facet>
+                            <p:column headerText="No" style="width: 50px;" 
+                                      exportable="false">
+                                <h:outputText value="#{rowIndex+1}"/>
+                            </p:column>
+                            <p:column headerText="Nama Barang" style="width: 200px;">
+                                <p:selectOneMenu value="#{list.mstBarang}" 
+                                                 required="true" requiredMessage="Barang tidak boleh kosong"
+                                                 converter="PickListConverter">
+                                    <p:ajax listener="#{pemesananMBean.totalHarga()}" update="idList, idTotalHarga, idJumlahPesan"/>
+                                    <f:selectItem itemValue="#{null}" itemLabel="PILIH BARANG" />
+                                    <f:selectItems value="#{pemesananMBean.listBarang}"
+                                                   var="barang"
+                                                   itemLabel="#{barang.namaBarang}"
+                                                   itemValue="#{barang}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column headerText="Jumlah" style="width: 100px;">
+                                <p:inputText id="idJumlahPesan" value="#{list.jumlahPesan}" disabled="#{list.mstBarang == null ? true : false}">
+                                </p:inputText>
+                            </p:column>
+                        </p:dataTable>
+                        <p:panel id="idTotalHarga" class="no-border" 
+                                 style="font-size: 20px; background-color: #ffbcb8">
+                            <p:panelGrid columns="2" columnClasses="ui-g-6, ui-g-6" style="width: 100%;">
+                                <p:commandButton value="Tambah Baris" style="width: 130px; background-color: #e8423a;" 
+                                                 icon="fa fa-plus"
+                                                 actionListener="#{pemesananMBean.tambahBaris()}"
+                                                 process="@this" update="idList"/>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel class="no-border no-padding" style="float: right;">
+                            <p:panelGrid class="no-border" columns="1" columnClasses="ui-g-12"
+                                         style="width: 100%;"
+                                         rendered="#{pemesananMBean.pemesanan.pemesananId != null ? false : true}">
+                                <p:commandButton id="btnSimpan" value="Simpan" icon="fa fa-save" 
+                                                 style="width: 140px; background-color: #008000e0;"
+                                                 actionListener="#{pemesananMBean.simpan()}" update="@form">
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel class="no-border no-padding" style="float: right;">
+                            <p:panelGrid class="no-border" columns="1" columnClasses="ui-g-12"
+                                         style="width: 100%;">
+                                <p:commandButton id="preCetak" value="Cetak" ajax="false" process="@this"
+                                                 actionListener="#{pemesananMBean.preCetak()}"
+                                                 rendered="#{pemesananMBean.pemesanan.pemesananId != null ? true : false}"
+                                                 >
+                                </p:commandButton>
+                                <p:commandLink id="cetak" value="Cetak" ajax="false" target="_blank" process="@this"
+                                               style="padding: .3em 1em; width: 150px; display: none"
+                                               styleClass="ui-button ui-widget ui-corner-all ui-button-text-only ui-button-text link-button"  
+                                               actionListener="#{pemesananMBean.cetakTransaksi()}"
+                                               />
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:panelGrid>
+                </p:panelGrid>
+
+                <!--                <h3>Export Page Data Only</h3>
+                                <h:commandLink immediate="true">
+                                    <p:graphicImage name="/images/logo-pt-air.jpeg" />
+                                    <p:dataExporter type="pdf" target="idList" fileName="cars"/>
+                                </h:commandLink>-->
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

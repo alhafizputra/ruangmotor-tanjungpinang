@@ -50,10 +50,6 @@
                               sortBy="#{list.jenisKelamin}">
                         <p:outputLabel value="#{list.jenisKelamin}"/>
                     </p:column>
-                    <p:column headerText="Kota"
-                              sortBy="#{list.kota.nama}">
-                        <p:outputLabel value="#{list.kota.nama}"/>
-                    </p:column>
                     <p:column headerText="Telepon"
                               sortBy="#{list.telepon}">
                         <p:outputLabel value="#{list.telepon}"/>
@@ -125,7 +121,6 @@
                             <th class="tg-0pky">Nama Karyawan</th>
                             <th class="tg-0pky">Jenis Kelamin</th>
                             <th class="tg-0pky">Alamat</th>
-                            <th class="tg-0pky">Kota</th>
                             <th class="tg-0pky">Telepon</th>
                             <th class="tg-0pky">Email</th>
                         </tr>
@@ -135,7 +130,6 @@
                                 <td class="tg-0pky">#{listKaryawan2.namaKaryawan}</td>
                                 <td class="tg-0pky">#{listKaryawan2.jenisKelamin}</td>
                                 <td class="tg-0pky">#{listKaryawan2.alamat}</td>
-                                <td class="tg-0pky">#{listKaryawan2.kota.nama}</td>
                                 <td class="tg-0pky">#{listKaryawan2.telepon}</td>
                                 <td class="tg-0pky">#{listKaryawan2.email}</td>
                             </tr>

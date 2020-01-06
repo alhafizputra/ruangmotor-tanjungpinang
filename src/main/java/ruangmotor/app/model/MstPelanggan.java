@@ -61,9 +61,9 @@ public class MstPelanggan {
     @Column(name = "alamat", length = 50)
     private String alamat;
 
-    @JoinColumn(name = "kota_id", referencedColumnName = "id")
-    @ManyToOne
-    private Kota kota;
+//    @JoinColumn(name = "kota_id", referencedColumnName = "id")
+//    @ManyToOne
+//    private Kota kota;
 
     @Column(name = "telepon", length = 15)
     private String telepon;
@@ -81,13 +81,13 @@ public class MstPelanggan {
     
     
 
-    public MstPelanggan(String kodePelanggan, String namaPelanggan, String jenisKelamin, Date tglLahir, String alamat, Kota kota, String telepon, Date createdAt) {
+    public MstPelanggan(String kodePelanggan, String namaPelanggan, String jenisKelamin, Date tglLahir, String alamat, String telepon, Date createdAt) {
         this.kodePelanggan = kodePelanggan;
         this.namaPelanggan = namaPelanggan;
         this.jenisKelamin = jenisKelamin;
         this.tglLahir = tglLahir;
         this.alamat = alamat;
-        this.kota = kota;
+//        this.kota = kota;
         this.telepon = telepon;
         this.createdAt = createdAt;
     }

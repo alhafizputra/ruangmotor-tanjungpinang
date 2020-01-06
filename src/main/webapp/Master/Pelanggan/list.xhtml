@@ -58,10 +58,6 @@
                             <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
                         </p:outputLabel>
                     </p:column>
-                    <p:column headerText="Kota"
-                              sortBy="#{list.kota.nama}">
-                        <p:outputLabel value="#{list.kota.nama}"/>
-                    </p:column>
                     <p:column headerText="Alamat"
                               sortBy="#{list.alamat}">
                         <p:outputLabel value="#{list.alamat}"/>
@@ -130,7 +126,6 @@
                             <th class="tg-0pky">Jenis Kelamin</th>
                             <th class="tg-0pky">Tanggal Lahir</th>
                             <th class="tg-0pky">Alamat</th>
-                            <th class="tg-0pky">Kota</th>
                             <th class="tg-0pky">Telepon</th>
                         </tr>
                         <c:forEach items="#{pelangganMBean.listPelanggan2}" var="listPelanggan2">
@@ -140,7 +135,6 @@
                                 <td class="tg-0pky">#{listPelanggan2.jenisKelamin}</td>
                                 <td class="tg-0pky">#{listPelanggan2.tglLahir}</td>
                                 <td class="tg-0pky">#{listPelanggan2.alamat}</td>
-                                <td class="tg-0pky">#{listPelanggan2.kota.nama}</td>
                                 <td class="tg-0pky">#{listPelanggan2.telepon}</td>
                             </tr>
                         </c:forEach>

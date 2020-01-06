@@ -17,19 +17,24 @@
                                 <p:menuitem value="Dashboard" icon="fa fa-dashboard" outcome="/dashboard"/>
                                 <p:submenu label="Master" icon="fa fa-database">
                                     <p:menuitem value="Kategori" icon="fa fa-database" outcome="/Master/kategori"/>
-                                    <p:menuitem value="Kota" icon="fa fa-database" outcome="/Master/kota"/>
+                                    <p:menuitem value="Data Supplier" icon="fa fa-database" outcome="/Master/Supplier/list"/>
                                     <p:menuitem value="Data Barang" icon="fa fa-database" outcome="/Master/Barang/list"/>
                                     <p:menuitem value="Data Pelanggan" icon="fa fa-database" outcome="/Master/Pelanggan/list"/>
                                     <p:menuitem value="Data Karyawan" icon="fa fa-database" outcome="/Master/Karyawan/list"/>
                                     <p:menuitem value="Data User" icon="fa fa-database" outcome="/Master/User/list" 
                                                 rendered="#{userController.currentUser.role.name eq 'SUPERADMIN' ? true : false}"/>
                                 </p:submenu>
-                                <p:submenu label="Transaksi" icon="fa fa-shopping-cart">
-                                    <p:menuitem value="Transaksi" icon="fa fa-shopping-cart" outcome="/Transaksi/transaksi"/>
-                                    <p:menuitem value="Riwayat Transaksi" icon="fa fa-history" outcome="/Transaksi/riwayatTransaksi"/>
+                                <p:submenu label="Transaksi Penjualan" icon="fa fa-shopping-cart">
+                                    <p:menuitem value="Penjualan" icon="fa fa-shopping-cart" outcome="/Transaksi/transaksi"/>
+                                    <p:menuitem value="Riwayat Penjualan" icon="fa fa-history" outcome="/Transaksi/riwayatTransaksi"/>
+                                </p:submenu>
+                                <p:submenu label="Transaksi Pemesanan" icon="fa fa-shopping-cart">
+                                    <p:menuitem value="Pemesanan" icon="fa fa-shopping-cart" outcome="/Pemesanan/transaksi"/>
+                                    <p:menuitem value="Riwayat Pemesanan" icon="fa fa-history" outcome="/Pemesanan/riwayatTransaksi"/>
                                 </p:submenu>
                                 <p:submenu label="Laporan" icon="fa fa-table">
-                                    <p:menuitem value="Laporan Transaksi" icon="fa fa-table" outcome="/Laporan/laporanTransaksi"/>
+                                    <p:menuitem value="Laporan Penjualan" icon="fa fa-table" outcome="/Laporan/laporanTransaksi"/>
+                                    <p:menuitem value="Laporan Pemesanan" icon="fa fa-table" outcome="/Laporan/laporanPemesanan"/>
                                 </p:submenu>
                                 <p:menuitem value="Keluar" icon="fa fa-sign-out" outcome="/login"/>
                             </pu:menu>

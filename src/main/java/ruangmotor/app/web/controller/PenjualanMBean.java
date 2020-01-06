@@ -189,9 +189,11 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
             barang = pd.getMstBarang();
             barang.setStok(barang.getStok() - pd.getJumlahJual());
             barangRepo.save(barang);
+            barang = pd.getMstBarang();
         }
         System.out.println("totalHarga : " + total);
         System.out.println("bayar : " + bayar);
+        System.out.println("barang : " + barang);
         click();
     }
 

@@ -179,14 +179,14 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                     Date tglLahir = mstPelanggan.getTglLahir();
                     String telepon = mstPelanggan.getTelepon();
                     String alamat = mstPelanggan.getAlamat();
-                    Kota kt = mstPelanggan.getKota();
+//                    Kota kt = mstPelanggan.getKota();
                     mstPelanggan = br;
                     mstPelanggan.setNamaPelanggan(namaPelanggan);
                     mstPelanggan.setJenisKelamin(jeniskelamin);
                     mstPelanggan.setTglLahir(tglLahir);
                     mstPelanggan.setTelepon(telepon);
                     mstPelanggan.setAlamat(alamat);
-                    mstPelanggan.setKota(kt);
+//                    mstPelanggan.setKota(kt);
                 }
             }
             mstPelanggan.setStatus(MstPelanggan.Status.ACTIVE);
