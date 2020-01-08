@@ -46,8 +46,8 @@ import javax.servlet.http.HttpServletRequest;
 @Scope("view")
 @Data
 public class SupplierMBean extends AbstractManagedBean implements InitializingBean {
-
-     @Autowired
+    
+    @Autowired
     private SupplierRepo supplierRepo;
 //    private LazyDataModelFilterJPA<MstSupplier> listSupplier;
     private List<MstSupplier> listSupplier;
@@ -60,13 +60,12 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
 //    private KotaRepo kotaRepo;
 //    private Kota kota;
 //    private List<Kota> listKota;
-
     public void init() {
 //        mstSupplier = new MstSupplier();
 //        kota = new Kota();
 //        listKota = kotaRepo.findAllByStatusOrderByNamaAsc(Kota.Status.ACTIVE);
     }
-
+    
     @Override
     public void afterPropertiesSet() throws Exception {
         init();
@@ -151,9 +150,9 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
 //                .append("%")
 //                .toString();
 //    }
-
     public void showDialogAction() {
         mstSupplierCek = (MstSupplier) getRequestParam("supplier");
+        System.out.println("mstSupplierCek : " + mstSupplierCek);
         mstSupplier = new MstSupplier();
         if (mstSupplierCek == null) {
             System.out.println("tambah");
@@ -169,40 +168,77 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
         RequestContext.getCurrentInstance().update("idDialocAct");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').show()");
     }
-
+    
     public void saveRecord() throws InterruptedException {
         try {
-            MstSupplier br = supplierRepo.findTop1ByKodeSupplier(mstSupplier.getKodeSupplier().toUpperCase());
-            System.out.println("br : " + br);
-            if (br != null) {
-                if (br.getStatus().equals(MstSupplier.Status.ACTIVE)) {
-                    showGrowl(FacesMessage.SEVERITY_ERROR,
-                            "Supplier dengan kode " + mstSupplier.getKodeSupplier().toUpperCase()
-                            + " sudah ada", "");
-                    return;
-                } else {
-                    mstSupplier.setStatus(MstSupplier.Status.INACTIVE);
-                    mstSupplier.setKodeSupplier(kodeSupplier);
-                    supplierRepo.save(mstSupplier);
-                    String namaSupplier = mstSupplier.getNamaSupplier();
+            System.out.println("mstSupplier : " + mstSupplier);
+            if (dalogHeader.equals("Tambah Supplier")) {
+                System.out.println("tambah");
+                MstSupplier sp = supplierRepo.findTop1ByKodeSupplier(mstSupplier.getKodeSupplier().toUpperCase());
+                System.out.println("sp : " + sp);
+                if (sp != null) {
+                    if (sp.getStatus().equals(MstSupplier.Status.ACTIVE)) {
+                        showGrowl(FacesMessage.SEVERITY_ERROR,
+                                "Supplier dengan kode " + mstSupplier.getKodeSupplier().toUpperCase()
+                                + " sudah ada", "");
+                        return;
+                    } else {
+                        mstSupplier.setStatus(MstSupplier.Status.INACTIVE);
+                        mstSupplier.setKodeSupplier(kodeSupplier);
+                        supplierRepo.save(mstSupplier);
+                        String namaSupplier = mstSupplier.getNamaSupplier();
 //                    String jeniskelamin = mstSupplier.getJenisKelamin();
 //                    Date tglLahir = mstSupplier.getTglLahir();
-                    String telepon = mstSupplier.getTelepon();
-                    String alamat = mstSupplier.getAlamat();
-                    String email = mstSupplier.getEmail();
+                        String telepon = mstSupplier.getTelepon();
+                        String alamat = mstSupplier.getAlamat();
+                        String email = mstSupplier.getEmail();
 //                    Kota kt = mstSupplier.getKota();
-                    mstSupplier = br;
-                    mstSupplier.setNamaSupplier(namaSupplier);
+                        mstSupplier = sp;
+                        mstSupplier.setNamaSupplier(namaSupplier);
 //                    mstSupplier.setJenisKelamin(jeniskelamin);
 //                    mstSupplier.setTglLahir(tglLahir);
-                    mstSupplier.setTelepon(telepon);
-                    mstSupplier.setAlamat(alamat);
-                    mstSupplier.setEmail(email);
+                        mstSupplier.setTelepon(telepon);
+                        mstSupplier.setAlamat(alamat);
+                        mstSupplier.setEmail(email);
 //                    mstSupplier.setKota(kt);
+                    }
                 }
+                mstSupplier.setStatus(MstSupplier.Status.ACTIVE);
+                supplierRepo.save(mstSupplier);
+            } else {
+                System.out.println("update");
+                MstSupplier sp = supplierRepo.findTop1ByKodeSupplier(mstSupplier.getKodeSupplier().toUpperCase());
+                System.out.println("sp : " + sp);
+                if (sp != null) {
+                    if (sp.getStatus().equals(MstSupplier.Status.ACTIVE) && !sp.getKodeSupplier().equals(kodeSupplier)) {
+                        showGrowl(FacesMessage.SEVERITY_ERROR,
+                                "Supplier dengan kode " + mstSupplier.getKodeSupplier().toUpperCase()
+                                + " sudah ada", "");
+//                        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+//                        RequestContext.getCurrentInstance().update("idList");
+//                        RequestContext.getCurrentInstance().update("growl");
+//                        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+//                        mstSupplier = new MstSupplier();
+                        mstSupplier.setKodeSupplier(kodeSupplier);
+                        return;
+                    } else {
+                        mstSupplier.setStatus(MstSupplier.Status.INACTIVE);
+                        mstSupplier.setKodeSupplier(kodeSupplier);
+                        supplierRepo.save(mstSupplier);
+                        String namaSupplier = mstSupplier.getNamaSupplier();
+                        String telepon = mstSupplier.getTelepon();
+                        String alamat = mstSupplier.getAlamat();
+                        String email = mstSupplier.getEmail();
+                        mstSupplier = sp;
+                        mstSupplier.setNamaSupplier(namaSupplier);
+                        mstSupplier.setTelepon(telepon);
+                        mstSupplier.setAlamat(alamat);
+                        mstSupplier.setEmail(email);
+                    }
+                }
+                mstSupplier.setStatus(MstSupplier.Status.ACTIVE);
+                supplierRepo.save(mstSupplier);
             }
-            mstSupplier.setStatus(MstSupplier.Status.ACTIVE);
-            supplierRepo.save(mstSupplier);
             showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
             RequestContext.getCurrentInstance().update("idList");
             RequestContext.getCurrentInstance().update("growl");
@@ -215,7 +251,7 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
             init();
         }
     }
-
+    
     public void deleteRecord() throws InterruptedException {
         mstSupplierCek = (MstSupplier) getRequestParam("supplier");
         mstSupplierCek.setStatus(MstSupplier.Status.INACTIVE);
@@ -224,7 +260,7 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
         RequestContext.getCurrentInstance().update("idList");
         RequestContext.getCurrentInstance().update("growl");
     }
-
+    
     public void showDialogCetak() {
         RequestContext.getCurrentInstance().reset("idDialogCetak");
         RequestContext.getCurrentInstance().update("idDialogCetak");

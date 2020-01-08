@@ -65,6 +65,9 @@ public class UserController extends AbstractManagedBean implements InitializingB
     private boolean isLoginDisabled = true;
 
     private String dalogHeader;
+    private String username;
+    private String noHp;
+    private String email;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -123,20 +126,63 @@ public class UserController extends AbstractManagedBean implements InitializingB
             return;
         }
 
-        if (userService.findByUsername(user.getUsername()) != null) {
-            showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Username sudah pernah terdaftar");
-        } else if (userService.findByEmail(user.getEmail()) != null) {
-            showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Email sudah pernah terdaftar");
-        } else {
-            user.setNamaLengkap(user.getNamaDepan().concat(" ").concat(user.getNamaBelakang()));
-            userService.save(user);
-            user = new User();
-            showGrowl(FacesMessage.SEVERITY_INFO, "Success", "Registrasi user berhasil");
-            isLoginDisabled = false;
-            RequestContext.getCurrentInstance().update("idList");
-            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+//        if (userService.findByUsername(user.getUsername()) != null) {
+//            showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Username sudah pernah terdaftar");
+//        } else if (userService.findByEmail(user.getEmail()) != null) {
+//            showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Email sudah pernah terdaftar");
+//        } else {
+//            user.setNamaLengkap(user.getNamaDepan().concat(" ").concat(user.getNamaBelakang()));
+//            userService.save(user);
+//            user = new User();
+//            showGrowl(FacesMessage.SEVERITY_INFO, "Success", "Registrasi user berhasil");
+//            isLoginDisabled = false;
+//            RequestContext.getCurrentInstance().update("idList");
+//            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+//        }
+//        RequestContext.getCurrentInstance().update("growl");
+        try {
+            if (dalogHeader.equals("Tambah User")) {
+                System.out.println("tambah");
+                if (userService.findByUsername(user.getUsername()) != null) {
+                    showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Username sudah pernah terdaftar");
+                } else if (userService.findByEmail(user.getEmail()) != null) {
+                    showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Email sudah pernah terdaftar");
+                } else {
+                    user.setNamaLengkap(user.getNamaDepan().concat(" ").concat(user.getNamaBelakang()));
+                    userService.save(user);
+                    user = new User();
+                    showGrowl(FacesMessage.SEVERITY_INFO, "Success", "Registrasi user berhasil");
+                    isLoginDisabled = false;
+                    RequestContext.getCurrentInstance().update("idList");
+                    RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+                }
+                RequestContext.getCurrentInstance().update("growl");
+            } else {
+                System.out.println("update");
+                if (userService.findByUsername(user.getUsername()) != null && !user.getUsername().equals(username)) {
+                    showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Username sudah pernah terdaftar");
+                } else if (userService.findByEmail(user.getEmail()) != null && !user.getEmail().equals(email)) {
+                    showGrowl(FacesMessage.SEVERITY_WARN, "Warning", "Email sudah pernah terdaftar");
+                } else {
+                    user.setNamaLengkap(user.getNamaDepan().concat(" ").concat(user.getNamaBelakang()));
+                    userService.save(user);
+                    user = new User();
+                    showGrowl(FacesMessage.SEVERITY_INFO, "Success", "Update user berhasil");
+                    isLoginDisabled = false;
+                    RequestContext.getCurrentInstance().update("idList");
+                    RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+                }
+                return;
+            }
+//            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+//            RequestContext.getCurrentInstance().update("idList");
+//            RequestContext.getCurrentInstance().update("growl");
+//            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+        } catch (Exception e) {
+            log.error("error : {}", e);
+            showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Terjadi kesalahan simpan data");
+            RequestContext.getCurrentInstance().update("growl");
         }
-        RequestContext.getCurrentInstance().update("growl");
     }
 
     public void login() {
@@ -167,13 +213,16 @@ public class UserController extends AbstractManagedBean implements InitializingB
         } else {
             System.out.println("update");
             dalogHeader = "Ubah User";
+            username = userCek.getUsername();
+            noHp = userCek.getNoHp();
+            email = userCek.getEmail();
             user = userCek;
         }
         RequestContext.getCurrentInstance().reset("idDialocAct");
         RequestContext.getCurrentInstance().update("idDialocAct");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').show()");
     }
-    
+
     public void deleteRecord() throws InterruptedException, IOException {
         userCek = (User) getRequestParam("user");
         System.out.println("userCek : " + userCek);

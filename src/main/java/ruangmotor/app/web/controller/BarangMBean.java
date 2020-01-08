@@ -189,8 +189,10 @@ public class BarangMBean extends AbstractManagedBean implements InitializingBean
             System.out.println("br : " + br);
             if (br != null) {
                 //update
-                if (br.getStatus().equals(MstBarang.Status.ACTIVE)) {
+                if (br.getStatus().equals(MstBarang.Status.ACTIVE) && !br.getKodeBarang().equals(kodeBarang)) {
                     showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Barang dengan kode " + br.getKodeBarang() + " sudah tersedia");
+                    RequestContext.getCurrentInstance().update("growl");
+                    mstBarang.setKodeBarang(kodeBarang);
                     return;
                 }
                 mstBarang.setStatus(MstBarang.Status.INACTIVE);
@@ -226,7 +228,7 @@ public class BarangMBean extends AbstractManagedBean implements InitializingBean
             showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Terjadi kesalahan simpan data");
             RequestContext.getCurrentInstance().update("growl");
         } finally {
-            init();
+//            init();
         }
     }
 

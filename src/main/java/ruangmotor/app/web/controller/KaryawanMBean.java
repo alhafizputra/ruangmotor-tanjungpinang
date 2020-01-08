@@ -54,7 +54,6 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
 //    private KotaRepo kotaRepo;
 //    private Kota kota;
 //    private List<Kota> listKota;
-
     public void init() {
         mstKaryawan = new MstKaryawan();
 //        kota = new Kota();
@@ -162,12 +161,12 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').show()");
     }
 
-    public void saveRecord() throws InterruptedException {
+    public void saveRecord2() throws InterruptedException {
         try {
-            MstKaryawan br = karyawanRepo.findTop1ByKodeKaryawan(mstKaryawan.getKodeKaryawan().toUpperCase());
-            System.out.println("br : " + br);
-            if (br != null) {
-                if (br.getStatus().equals(MstKaryawan.Status.ACTIVE)) {
+            MstKaryawan kr = karyawanRepo.findTop1ByKodeKaryawan(mstKaryawan.getKodeKaryawan().toUpperCase());
+            System.out.println("kr : " + kr);
+            if (kr != null) {
+                if (kr.getStatus().equals(MstKaryawan.Status.ACTIVE)) {
                     showGrowl(FacesMessage.SEVERITY_ERROR,
                             "Karyawan dengan kode " + mstKaryawan.getKodeKaryawan().toUpperCase()
                             + " sudah ada", "");
@@ -182,7 +181,7 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
                     String telepon = mstKaryawan.getTelepon();
                     String alamat = mstKaryawan.getAlamat();
 //                    Kota kt = mstKaryawan.getKota();
-                    mstKaryawan = br;
+                    mstKaryawan = kr;
                     mstKaryawan.setNamaKaryawan(namaKaryawan);
                     mstKaryawan.setJenisKelamin(jeniskelamin);
                     mstKaryawan.setEmail(email);
@@ -203,6 +202,81 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
             RequestContext.getCurrentInstance().update("growl");
         } finally {
             init();
+        }
+    }
+
+    public void saveRecord() throws InterruptedException {
+        try {
+            if (dalogHeader.equals("Tambah Karyawan")) {
+                System.out.println("tambah");
+                MstKaryawan kr = karyawanRepo.findTop1ByKodeKaryawan(mstKaryawan.getKodeKaryawan().toUpperCase());
+                System.out.println("kr : " + kr);
+                if (kr != null) {
+                    if (kr.getStatus().equals(MstKaryawan.Status.ACTIVE)) {
+                        showGrowl(FacesMessage.SEVERITY_ERROR,
+                                "Pelanggan dengan kode " + mstKaryawan.getKodeKaryawan().toUpperCase()
+                                + " sudah ada", "");
+                        return;
+                    } else {
+                        mstKaryawan.setStatus(MstKaryawan.Status.INACTIVE);
+                        mstKaryawan.setKodeKaryawan(kodeKaryawan);
+                        karyawanRepo.save(mstKaryawan);
+                        String namaKaryawan = mstKaryawan.getNamaKaryawan();
+                        String jeniskelamin = mstKaryawan.getJenisKelamin();
+                        String email = mstKaryawan.getEmail();
+                        String telepon = mstKaryawan.getTelepon();
+                        String alamat = mstKaryawan.getAlamat();
+//                    Kota kt = mstKaryawan.getKota();
+                        mstKaryawan = kr;
+                        mstKaryawan.setNamaKaryawan(namaKaryawan);
+                        mstKaryawan.setJenisKelamin(jeniskelamin);
+                        mstKaryawan.setEmail(email);
+                        mstKaryawan.setTelepon(telepon);
+                        mstKaryawan.setAlamat(alamat);
+                    }
+                }
+                mstKaryawan.setStatus(MstKaryawan.Status.ACTIVE);
+                karyawanRepo.save(mstKaryawan);
+            } else {
+                System.out.println("update");
+                MstKaryawan kr = karyawanRepo.findTop1ByKodeKaryawan(mstKaryawan.getKodeKaryawan().toUpperCase());
+                System.out.println("kr : " + kr);
+                if (kr != null) {
+                    if (kr.getStatus().equals(MstKaryawan.Status.ACTIVE) && !kr.getKodeKaryawan().equals(kodeKaryawan)) {
+                        showGrowl(FacesMessage.SEVERITY_ERROR,
+                                "Pelanggan dengan kode " + mstKaryawan.getKodeKaryawan().toUpperCase()
+                                + " sudah ada", "");
+                        mstKaryawan.setKodeKaryawan(kodeKaryawan);
+                        return;
+                    } else {
+                        mstKaryawan.setStatus(MstKaryawan.Status.INACTIVE);
+                        mstKaryawan.setKodeKaryawan(kodeKaryawan);
+                        karyawanRepo.save(mstKaryawan);
+                        String namaKaryawan = mstKaryawan.getNamaKaryawan();
+                        String jeniskelamin = mstKaryawan.getJenisKelamin();
+                        String email = mstKaryawan.getEmail();
+                        String telepon = mstKaryawan.getTelepon();
+                        String alamat = mstKaryawan.getAlamat();
+//                    Kota kt = mstKaryawan.getKota();
+                        mstKaryawan = kr;
+                        mstKaryawan.setNamaKaryawan(namaKaryawan);
+                        mstKaryawan.setJenisKelamin(jeniskelamin);
+                        mstKaryawan.setEmail(email);
+                        mstKaryawan.setTelepon(telepon);
+                        mstKaryawan.setAlamat(alamat);
+                    }
+                }
+                mstKaryawan.setStatus(MstKaryawan.Status.ACTIVE);
+                karyawanRepo.save(mstKaryawan);
+            }
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+        } catch (Exception e) {
+            log.error("error : {}", e);
+            showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Terjadi kesalahan simpan data");
+            RequestContext.getCurrentInstance().update("growl");
         }
     }
 

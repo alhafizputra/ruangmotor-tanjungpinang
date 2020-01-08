@@ -115,16 +115,16 @@ public class KategoriMBean extends AbstractManagedBean implements InitializingBe
             if (kategoriCek == null) {
                 System.out.println("tambah");
                 //tambah
-                kategoriCek = kategoriRepo.findTop1ByNamaKategori(namaKategori);
+                Kategori kategoriCek2 = kategoriRepo.findTop1ByNamaKategori(namaKategori);
                 //cek apakah kategori tsb sudah ada atau tidak
-                if (kategoriCek != null) {
+                if (kategoriCek2 != null) {
                     //cek apakah status kategori tsb aktif atau tidak
-                    if (kategoriCek.getStatus().equals(Kategori.Status.ACTIVE)) {
+                    if (kategoriCek2.getStatus().equals(Kategori.Status.ACTIVE)) {
                         showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Kategori " + namaKategori + " sudah tersedia");
                         RequestContext.getCurrentInstance().update("growl");
                         return;
                     } else {
-                        kategori = kategoriCek;
+                        kategori = kategoriCek2;
                         System.out.println("kategori : " + kategori);
                         kategori.setNamaKategori(namaKategori);
                     }
@@ -136,18 +136,24 @@ public class KategoriMBean extends AbstractManagedBean implements InitializingBe
                 System.out.println("update");
                 //update
                 if (!namaKategori.equals(kategoriCek.getNamaKategori())) {
-                    kategoriCek = kategoriRepo.findTop1ByNamaKategori(namaKategori);
-                    if (kategoriCek != null) {
-                        if (kategoriCek.getStatus().equals(Kategori.Status.ACTIVE)) {
+                    Kategori kategoriCek2 = kategoriRepo.findTop1ByNamaKategori(namaKategori);
+                    System.out.println("kategoriCek : " + kategoriCek);
+                    if (kategoriCek2 != null) {
+                        System.out.println("if");
+                        if (kategoriCek2.getStatus().equals(Kategori.Status.ACTIVE)) {
                             showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Kategori " + namaKategori + " sudah tersedia");
                             RequestContext.getCurrentInstance().update("growl");
                             return;
                         } else {
-                            kategori = kategoriCek;
+                            kategori = kategoriCek2;
                             System.out.println("kategori : " + kategori);
                             kategori.setNamaKategori(namaKategori);
                         }
                     } else {
+                        System.out.println("else");
+                        kategori = kategoriCek;
+                        System.out.println("kategori : " + kategori);
+                        System.out.println("namaKategori : " + namaKategori);
                         kategori.setNamaKategori(namaKategori);
                     }
                 } else {

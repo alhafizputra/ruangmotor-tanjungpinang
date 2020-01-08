@@ -43,7 +43,7 @@ import java.util.Date;
 @Data
 public class PelangganMBean extends AbstractManagedBean implements InitializingBean {
 
-     @Autowired
+    @Autowired
     private PelangganRepo pelangganRepo;
     private LazyDataModelFilterJPA<MstPelanggan> listPelanggan;
     private List<MstPelanggan> listPelanggan2;
@@ -87,7 +87,7 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                 mstPelanggan.setKodePelanggan((String) filters.get("kodePelanggan"));
                 mstPelanggan.setAlamat((String) filters.get("alamat"));
                 mstPelanggan.setJenisKelamin((String) filters.get("jenisKelamin"));
-                 mstPelanggan.setTglLahir((Date) filters.get("tglLahir"));
+                mstPelanggan.setTglLahir((Date) filters.get("tglLahir"));
                 mstPelanggan.setTelepon((String) filters.get("telepon"));
                 kota = (Kota) filters.get("kota");
                 return pelangganRepo.count(whereQuery());
@@ -162,35 +162,69 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
 
     public void saveRecord() throws InterruptedException {
         try {
-            MstPelanggan br = pelangganRepo.findTop1ByKodePelanggan(mstPelanggan.getKodePelanggan().toUpperCase());
-            System.out.println("br : " + br);
-            if (br != null) {
-                if (br.getStatus().equals(MstPelanggan.Status.ACTIVE)) {
-                    showGrowl(FacesMessage.SEVERITY_ERROR,
-                            "Pelanggan dengan kode " + mstPelanggan.getKodePelanggan().toUpperCase()
-                            + " sudah ada", "");
-                    return;
-                } else {
-                    mstPelanggan.setStatus(MstPelanggan.Status.INACTIVE);
-                    mstPelanggan.setKodePelanggan(kodePelanggan);
-                    pelangganRepo.save(mstPelanggan);
-                    String namaPelanggan = mstPelanggan.getNamaPelanggan();
-                    String jeniskelamin = mstPelanggan.getJenisKelamin();
-                    Date tglLahir = mstPelanggan.getTglLahir();
-                    String telepon = mstPelanggan.getTelepon();
-                    String alamat = mstPelanggan.getAlamat();
+            if (dalogHeader.equals("Tambah Pelanggan")) {
+                System.out.println("tambah");
+                MstPelanggan pl = pelangganRepo.findTop1ByKodePelanggan(mstPelanggan.getKodePelanggan().toUpperCase());
+                System.out.println("pl : " + pl);
+                if (pl != null) {
+                    if (pl.getStatus().equals(MstPelanggan.Status.ACTIVE)) {
+                        showGrowl(FacesMessage.SEVERITY_ERROR,
+                                "Pelanggan dengan kode " + mstPelanggan.getKodePelanggan().toUpperCase()
+                                + " sudah ada", "");
+                        return;
+                    } else {
+                        mstPelanggan.setStatus(MstPelanggan.Status.INACTIVE);
+                        mstPelanggan.setKodePelanggan(kodePelanggan);
+                        pelangganRepo.save(mstPelanggan);
+                        String namaPelanggan = mstPelanggan.getNamaPelanggan();
+                        String jeniskelamin = mstPelanggan.getJenisKelamin();
+                        Date tglLahir = mstPelanggan.getTglLahir();
+                        String telepon = mstPelanggan.getTelepon();
+                        String alamat = mstPelanggan.getAlamat();
 //                    Kota kt = mstPelanggan.getKota();
-                    mstPelanggan = br;
-                    mstPelanggan.setNamaPelanggan(namaPelanggan);
-                    mstPelanggan.setJenisKelamin(jeniskelamin);
-                    mstPelanggan.setTglLahir(tglLahir);
-                    mstPelanggan.setTelepon(telepon);
-                    mstPelanggan.setAlamat(alamat);
+                        mstPelanggan = pl;
+                        mstPelanggan.setNamaPelanggan(namaPelanggan);
+                        mstPelanggan.setJenisKelamin(jeniskelamin);
+                        mstPelanggan.setTglLahir(tglLahir);
+                        mstPelanggan.setTelepon(telepon);
+                        mstPelanggan.setAlamat(alamat);
 //                    mstPelanggan.setKota(kt);
+                    }
                 }
+                mstPelanggan.setStatus(MstPelanggan.Status.ACTIVE);
+                pelangganRepo.save(mstPelanggan);
+            } else {
+                System.out.println("update");
+                MstPelanggan pl = pelangganRepo.findTop1ByKodePelanggan(mstPelanggan.getKodePelanggan().toUpperCase());
+                System.out.println("pl : " + pl);
+                if (pl != null) {
+                    if (pl.getStatus().equals(MstPelanggan.Status.ACTIVE) && !pl.getKodePelanggan().equals(kodePelanggan)) {
+                        showGrowl(FacesMessage.SEVERITY_ERROR,
+                                "Pelanggan dengan kode " + mstPelanggan.getKodePelanggan().toUpperCase()
+                                + " sudah ada", "");
+                        mstPelanggan.setKodePelanggan(kodePelanggan);
+                        return;
+                    } else {
+                        mstPelanggan.setStatus(MstPelanggan.Status.INACTIVE);
+                        mstPelanggan.setKodePelanggan(kodePelanggan);
+                        pelangganRepo.save(mstPelanggan);
+                        String namaPelanggan = mstPelanggan.getNamaPelanggan();
+                        String jeniskelamin = mstPelanggan.getJenisKelamin();
+                        Date tglLahir = mstPelanggan.getTglLahir();
+                        String telepon = mstPelanggan.getTelepon();
+                        String alamat = mstPelanggan.getAlamat();
+//                    Kota kt = mstPelanggan.getKota();
+                        mstPelanggan = pl;
+                        mstPelanggan.setNamaPelanggan(namaPelanggan);
+                        mstPelanggan.setJenisKelamin(jeniskelamin);
+                        mstPelanggan.setTglLahir(tglLahir);
+                        mstPelanggan.setTelepon(telepon);
+                        mstPelanggan.setAlamat(alamat);
+                    }
+                }
+                mstPelanggan.setStatus(MstPelanggan.Status.ACTIVE);
+                pelangganRepo.save(mstPelanggan);
             }
-            mstPelanggan.setStatus(MstPelanggan.Status.ACTIVE);
-            pelangganRepo.save(mstPelanggan);
             showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
             RequestContext.getCurrentInstance().update("idList");
             RequestContext.getCurrentInstance().update("growl");
@@ -199,8 +233,6 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
             log.error("error : {}", e);
             showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Terjadi kesalahan simpan data");
             RequestContext.getCurrentInstance().update("growl");
-        } finally {
-            init();
         }
     }
 
