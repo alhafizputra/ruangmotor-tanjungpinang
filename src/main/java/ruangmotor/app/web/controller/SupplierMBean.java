@@ -46,7 +46,7 @@ import javax.servlet.http.HttpServletRequest;
 @Scope("view")
 @Data
 public class SupplierMBean extends AbstractManagedBean implements InitializingBean {
-    
+
     @Autowired
     private SupplierRepo supplierRepo;
 //    private LazyDataModelFilterJPA<MstSupplier> listSupplier;
@@ -65,7 +65,7 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
 //        kota = new Kota();
 //        listKota = kotaRepo.findAllByStatusOrderByNamaAsc(Kota.Status.ACTIVE);
     }
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         init();
@@ -157,6 +157,12 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
         if (mstSupplierCek == null) {
             System.out.println("tambah");
             dalogHeader = "Tambah Supplier";
+            MstSupplier pSupplier = supplierRepo.findTop1ByStatusOrderByNamaSupplierAsc(MstSupplier.Status.ACTIVE);
+            Integer nextSupplierId = pSupplier != null ? pSupplier.getSupplierId() + 1 : 1;
+            kodeSupplier = nextSupplierId.toString().length() == 1 ? "S00".concat(nextSupplierId.toString())
+                    : nextSupplierId.toString().length() == 2 ? "S0".concat(nextSupplierId.toString())
+                    : "S".concat(nextSupplierId.toString());
+            mstSupplier.setKodeSupplier(kodeSupplier);
         } else {
             System.out.println("update");
             dalogHeader = "Ubah Supplier";
@@ -168,7 +174,7 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
         RequestContext.getCurrentInstance().update("idDialocAct");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').show()");
     }
-    
+
     public void saveRecord() throws InterruptedException {
         try {
             System.out.println("mstSupplier : " + mstSupplier);
@@ -251,7 +257,7 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
             init();
         }
     }
-    
+
     public void deleteRecord() throws InterruptedException {
         mstSupplierCek = (MstSupplier) getRequestParam("supplier");
         mstSupplierCek.setStatus(MstSupplier.Status.INACTIVE);
@@ -260,13 +266,13 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
         RequestContext.getCurrentInstance().update("idList");
         RequestContext.getCurrentInstance().update("growl");
     }
-    
+
     public void showDialogCetak() {
         RequestContext.getCurrentInstance().reset("idDialogCetak");
         RequestContext.getCurrentInstance().update("idDialogCetak");
         RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
-    
+
     public void reload() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());

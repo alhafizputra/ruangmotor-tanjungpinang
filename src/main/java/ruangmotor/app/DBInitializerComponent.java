@@ -165,9 +165,9 @@ public class DBInitializerComponent implements CommandLineRunner {
         System.out.println("======initlialisePelanggan======");
         try {
             List<MstPelanggan> listPelanggan = new ArrayList<>();
-            listPelanggan.add(new MstPelanggan("P001", "PELANGGAN SATU", "L", new SimpleDateFormat("dd/MM/yyyy").parse("01/12/1998"), "JL. SUDIRMAN NO 49", "6282147756435", new java.util.Date()));
-            listPelanggan.add(new MstPelanggan("P002", "PELANGGAN DUA", "L", new SimpleDateFormat("dd/MM/yyyy").parse("21/11/1998"), "JL. MURADI NO 22", "6282146742324", new java.util.Date()));
-            listPelanggan.add(new MstPelanggan("P003", "PELANGGAN TIGA", "P", new SimpleDateFormat("dd/MM/yyyy").parse("02/06/1998"), "JL. IMAM BONJOL NO 34", "6282147743523", new java.util.Date()));
+            listPelanggan.add(new MstPelanggan("P001", "PELANGGAN SATU", "L", "JL. SUDIRMAN NO 49", "6282147756435", new java.util.Date()));
+            listPelanggan.add(new MstPelanggan("P002", "PELANGGAN DUA", "L", "JL. MURADI NO 22", "6282146742324", new java.util.Date()));
+            listPelanggan.add(new MstPelanggan("P003", "PELANGGAN TIGA", "P", "JL. IMAM BONJOL NO 34", "628214774352s3", new java.util.Date()));
             pelangganRepo.save(listPelanggan);
             System.out.println("Success Initialising Pelanggan");
         } catch (Exception e) {

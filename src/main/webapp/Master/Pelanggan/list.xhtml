@@ -52,12 +52,6 @@
                               sortBy="#{list.jenisKelamin}">
                         <p:outputLabel value="#{list.jenisKelamin}"/>
                     </p:column>
-                    <p:column headerText="Tanggal Lahir"
-                              sortBy="#{list.tglLahir}">
-                        <p:outputLabel value="#{list.tglLahir}">
-                            <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
-                        </p:outputLabel>
-                    </p:column>
                     <p:column headerText="Alamat"
                               sortBy="#{list.alamat}">
                         <p:outputLabel value="#{list.alamat}"/>
@@ -133,7 +127,6 @@
                                 <td class="tg-0pky">#{listPelanggan2.kodePelanggan}</td>
                                 <td class="tg-0pky">#{listPelanggan2.namaPelanggan}</td>
                                 <td class="tg-0pky">#{listPelanggan2.jenisKelamin}</td>
-                                <td class="tg-0pky">#{listPelanggan2.tglLahir}</td>
                                 <td class="tg-0pky">#{listPelanggan2.alamat}</td>
                                 <td class="tg-0pky">#{listPelanggan2.telepon}</td>
                             </tr>

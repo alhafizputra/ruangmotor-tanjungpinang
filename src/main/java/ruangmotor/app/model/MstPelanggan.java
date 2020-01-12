@@ -55,8 +55,8 @@ public class MstPelanggan {
     @Column(name = "jenis_kelamin", length = 10)
     private String jenisKelamin;
     
-    @Column(name = "tgl_lahir")
-    private Date tglLahir;
+//    @Column(name = "tgl_lahir")
+//    private Date tglLahir;
 
     @Column(name = "alamat", length = 50)
     private String alamat;
@@ -81,11 +81,10 @@ public class MstPelanggan {
     
     
 
-    public MstPelanggan(String kodePelanggan, String namaPelanggan, String jenisKelamin, Date tglLahir, String alamat, String telepon, Date createdAt) {
+    public MstPelanggan(String kodePelanggan, String namaPelanggan, String jenisKelamin, String alamat, String telepon, Date createdAt) {
         this.kodePelanggan = kodePelanggan;
         this.namaPelanggan = namaPelanggan;
         this.jenisKelamin = jenisKelamin;
-        this.tglLahir = tglLahir;
         this.alamat = alamat;
 //        this.kota = kota;
         this.telepon = telepon;

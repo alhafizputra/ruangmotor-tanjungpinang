@@ -83,7 +83,7 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     private List<MstPelanggan> listPelanggan;
 
     private String notaJual;
-    private String cariNotaJual;
+    private String cariPelanggan;
     private Date tglDari;
     private Date tglSampai;
 
@@ -264,15 +264,17 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
 //    public void onChangeBayar() {
 //        kembali = bayar - penjualan.getTotalHarga().intValue();
 //    }
-    public void cariPenjualanByNota() {
-        System.out.println("cariNotaJual : " + cariNotaJual);
+    public void cariPenjualanByNama() {
+        System.out.println("cariPelanggan : " + cariPelanggan);
+        MstPelanggan mstPelanggan = pelangganRepo.findTop1ByNamaPelangganAndStatus(cariPelanggan, MstPelanggan.Status.ACTIVE);
         listPenjualan = new ArrayList<>();
-        if (cariNotaJual == null || cariNotaJual.equals("")) {
+        if (cariPelanggan == null || cariPelanggan.equals("")) {
             listPenjualan = penjualanRepo.findAllByStatus(TrPenjualan.Status.ACTIVE);
         } else {
-            listPenjualan = penjualanRepo.findAllByNotaJual(cariNotaJual);
+            if (mstPelanggan != null) {
+                listPenjualan = penjualanRepo.findAllByMstPelanggan(mstPelanggan);
+            }
         }
-
     }
 
     public void showDialogAction() {

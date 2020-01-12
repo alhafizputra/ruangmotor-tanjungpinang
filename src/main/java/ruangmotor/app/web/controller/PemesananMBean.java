@@ -51,7 +51,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.springframework.beans.factory.annotation.Value;
+import ruangmotor.app.model.MstPelanggan;
 
 /**
  *
@@ -83,7 +83,7 @@ public class PemesananMBean extends AbstractManagedBean implements InitializingB
     private List<MstSupplier> listSupplier;
 
     private String notaPesan;
-    private String cariNotaPesan;
+    private String cariSupplier;
     private Date tglDari;
     private Date tglSampai;
 
@@ -263,15 +263,17 @@ public class PemesananMBean extends AbstractManagedBean implements InitializingB
 //    public void onChangeBayar() {
 //        kembali = bayar - pemesanan.getTotalHarga().intValue();
 //    }
-    public void cariPemesananByNota() {
-        System.out.println("cariNotaPesan : " + cariNotaPesan);
+    public void cariPemesananByNama() {
+        System.out.println("cariSupplier : " + cariSupplier);
+        MstSupplier mstSupplier = supplierRepo.findTop1ByNamaSupplierAndStatus(cariSupplier, MstSupplier.Status.ACTIVE);
         listPemesanan = new ArrayList<>();
-        if (cariNotaPesan == null || cariNotaPesan.equals("")) {
+        if (cariSupplier == null || cariSupplier.equals("")) {
             listPemesanan = pemesananRepo.findAllByStatus(TrPemesanan.Status.ACTIVE);
         } else {
-            listPemesanan = pemesananRepo.findAllByNotaPesan(cariNotaPesan);
+            if (mstSupplier != null) {
+                listPemesanan = pemesananRepo.findAllByMstSupplier(mstSupplier);
+            }
         }
-
     }
 
     public void showDialogAction() {

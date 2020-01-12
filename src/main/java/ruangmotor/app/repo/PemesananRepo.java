@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import ruangmotor.app.model.MstSupplier;
 import ruangmotor.app.model.TrPemesanan;
 
 /**
@@ -23,6 +24,8 @@ public interface PemesananRepo extends JpaRepository<TrPemesanan, Integer>, JpaS
     public TrPemesanan findTop1ByNotaPesan(String notaPesan);
 
     public List<TrPemesanan> findAllByNotaPesan(String notaPesan);
+
+    public List<TrPemesanan> findAllByMstSupplier(MstSupplier mstSupplier);
 
     public TrPemesanan findTop1ByStatusOrderByPemesananIdDesc(TrPemesanan.Status status);
 

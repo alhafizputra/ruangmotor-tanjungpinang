@@ -26,6 +26,8 @@ public interface PelangganRepo extends JpaRepository<MstPelanggan, BigDecimal>, 
     public MstPelanggan findTop1ByKodePelangganAndStatus(String kodePelanggan, MstPelanggan.Status s);
 
     public MstPelanggan findTop1ByKodePelanggan(String kodePelanggan);
+    
+    public MstPelanggan findTop1ByStatusOrderByNamaPelangganAsc(MstPelanggan.Status status);
 
     public Integer countByStatus(MstPelanggan.Status status);
 }

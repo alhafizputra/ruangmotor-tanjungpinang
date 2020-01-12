@@ -19,10 +19,12 @@ public interface KaryawanRepo extends JpaRepository<MstKaryawan, Integer>, JpaSp
     public MstKaryawan findTop1ByNamaKaryawanAndStatus(String nama, MstKaryawan.Status s);
 
     public MstKaryawan findTop1ByKodeKaryawanAndStatus(String kode, MstKaryawan.Status s);
-    
+
     public MstKaryawan findTop1ByKodeKaryawan(String kode);
 
     public List<MstKaryawan> findAllByStatusOrderByNamaKaryawanAsc(MstKaryawan.Status s);
-    
+
     public Integer countByStatus(MstKaryawan.Status status);
+
+    public MstKaryawan findTop1ByStatusOrderByNamaKaryawanAsc(MstKaryawan.Status status);
 }

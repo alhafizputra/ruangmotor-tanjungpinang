@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import ruangmotor.app.model.MstPelanggan;
 import ruangmotor.app.model.TrPenjualan;
 
 /**
@@ -23,6 +24,8 @@ public interface PenjualanRepo extends JpaRepository<TrPenjualan, Integer>, JpaS
     public TrPenjualan findTop1ByNotaJual(String notaJual);
 
     public List<TrPenjualan> findAllByNotaJual(String notaJual);
+    
+    public List<TrPenjualan> findAllByMstPelanggan(MstPelanggan mstPelanggan);
 
     public TrPenjualan findTop1ByStatusOrderByPenjualanIdDesc(TrPenjualan.Status status);
 

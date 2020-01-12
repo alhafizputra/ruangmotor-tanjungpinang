@@ -15,9 +15,9 @@
                 <p:panelGrid columns="3" layout="grid" class="no-border" columnClasses="ui-g-1,ui-g-2,ui-g-2"
                              style="text-align: left;">
                     <p:outputLabel value="Nota"/>
-                    <p:inputText value="#{penjualanMBean.cariNotaJual}"/>
+                    <p:inputText value="#{penjualanMBean.cariPelanggan}"/>
                     <p:commandButton value="Cari" icon="fa fa-search" update="@form"
-                                     actionListener="#{penjualanMBean.cariPenjualanByNota()}"
+                                     actionListener="#{penjualanMBean.cariPenjualanByNama()}"
                                      style="width: 80px;"/>
                 </p:panelGrid>
 

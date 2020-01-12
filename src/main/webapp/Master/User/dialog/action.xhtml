@@ -19,7 +19,7 @@
                     <p:outputLabel value="No. HP" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText id="mobileNumber" placeholder="e.g. 6282112345678"
                                  value="#{userController.user.noHp}" 
-                                 onkeypress="return isNumberKey()(event)"
+                                 onkeypress="isNumberKey(event)"
                                  required="true" requiredMessage="No. HP harus diisi"/>
                     <p:outputLabel value="Nama Depan" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText id="firstName"

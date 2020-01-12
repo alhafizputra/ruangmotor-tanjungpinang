@@ -18,7 +18,7 @@
                              style="width: 100%"
                              styleClass="ui-panelgrid-blank form-group">
                     <p:outputLabel value="Kode Supplier" class="req-mandatory"/><p:outputLabel value=":"/>
-                    <p:inputText value="#{supplierMBean.mstSupplier.kodeSupplier}"
+                    <p:inputText value="#{supplierMBean.mstSupplier.kodeSupplier}" disabled="true"
                                  required="true" requiredMessage="Kode Supplier tidak boleh kosong" 
                                  style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
                     <p:outputLabel value="Nama Supplier" class="req-mandatory"/><p:outputLabel value=":"/>
@@ -28,6 +28,7 @@
                     <p:outputLabel value="Telepon" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText value="#{supplierMBean.mstSupplier.telepon}"
                                  required="true" requiredMessage="Telepon tidak boleh kosong" 
+                                 onkeypress="return isNumberKey()(event)"
                                  style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
                     <p:outputLabel value="Email" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText value="#{supplierMBean.mstSupplier.email}"

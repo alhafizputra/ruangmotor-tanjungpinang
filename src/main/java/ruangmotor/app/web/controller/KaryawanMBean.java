@@ -149,6 +149,12 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
         if (mstKaryawanCek == null) {
             System.out.println("tambah");
             dalogHeader = "Tambah Karyawan";
+            MstKaryawan pKaryawan = karyawanRepo.findTop1ByStatusOrderByNamaKaryawanAsc(MstKaryawan.Status.ACTIVE);
+            Integer nextKaryawanId = pKaryawan != null ? pKaryawan.getKaryawanId() + 1 : 1;
+            kodeKaryawan = nextKaryawanId.toString().length() == 1 ? "K00".concat(nextKaryawanId.toString())
+                    : nextKaryawanId.toString().length() == 2 ? "K0".concat(nextKaryawanId.toString())
+                    : "K".concat(nextKaryawanId.toString());
+            mstKaryawan.setKodeKaryawan(kodeKaryawan);
         } else {
             System.out.println("update");
             dalogHeader = "Ubah Karyawan";
@@ -214,7 +220,7 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
                 if (kr != null) {
                     if (kr.getStatus().equals(MstKaryawan.Status.ACTIVE)) {
                         showGrowl(FacesMessage.SEVERITY_ERROR,
-                                "Pelanggan dengan kode " + mstKaryawan.getKodeKaryawan().toUpperCase()
+                                "Karyawan dengan kode " + mstKaryawan.getKodeKaryawan().toUpperCase()
                                 + " sudah ada", "");
                         return;
                     } else {
@@ -244,7 +250,7 @@ public class KaryawanMBean extends AbstractManagedBean implements InitializingBe
                 if (kr != null) {
                     if (kr.getStatus().equals(MstKaryawan.Status.ACTIVE) && !kr.getKodeKaryawan().equals(kodeKaryawan)) {
                         showGrowl(FacesMessage.SEVERITY_ERROR,
-                                "Pelanggan dengan kode " + mstKaryawan.getKodeKaryawan().toUpperCase()
+                                "Karyawan dengan kode " + mstKaryawan.getKodeKaryawan().toUpperCase()
                                 + " sudah ada", "");
                         mstKaryawan.setKodeKaryawan(kodeKaryawan);
                         return;

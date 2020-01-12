@@ -18,7 +18,7 @@
                              style="width: 100%"
                              styleClass="ui-panelgrid-blank form-group">
                     <p:outputLabel value="Kode Pelanggan" class="req-mandatory"/><p:outputLabel value=":"/>
-                    <p:inputText value="#{pelangganMBean.mstPelanggan.kodePelanggan}"
+                    <p:inputText value="#{pelangganMBean.mstPelanggan.kodePelanggan}" disabled="true"
                                  required="true" requiredMessage="Kode Pelanggan tidak boleh kosong" 
                                  style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
                     <p:outputLabel value="Nama Pelanggan" class="req-mandatory"/><p:outputLabel value=":"/>
@@ -31,12 +31,6 @@
                         <f:selectItem itemLabel="Laki-Laki" itemValue="P" />
                         <f:selectItem itemLabel="Perempuan" itemValue="W"/>
                     </p:selectOneRadio>
-                    <p:outputLabel value="Tanggal Lahir" class="req-mandatory"/><p:outputLabel value=":"/>
-                    <p:calendar value="#{pelangganMBean.mstPelanggan.tglLahir}" 
-                                navigator="true" pattern="dd-MM-yyyy" mask="true" showOn="button"
-                                yearRange="c-80:c" maxdate="#{now}" 
-                                required="true" requiredMessage="Tanggal Lahir tidak boleh kosong" 
-                                style="width:18vw"/>
                     <p:outputLabel value="Alamat" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText value="#{pelangganMBean.mstPelanggan.alamat}"
                                  required="true" requiredMessage="Alamat tidak boleh kosong" 
@@ -44,6 +38,7 @@
                     <p:outputLabel value="Telepon" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText value="#{pelangganMBean.mstPelanggan.telepon}"
                                  required="true" requiredMessage="Harga Jual tidak boleh kosong" 
+                                 onkeypress="return isNumberKey()(event)"
                                  style="width:18vw" converter="upperCaseConverter" styleClass="capitalized"/>
                 </p:panelGrid>
             </p:panel>

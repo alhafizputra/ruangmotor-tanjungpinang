@@ -75,7 +75,6 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                 mstPelanggan.setKodePelanggan((String) filters.get("kodePelanggan"));
                 mstPelanggan.setAlamat((String) filters.get("alamat"));
                 mstPelanggan.setJenisKelamin((String) filters.get("jenisKelamin"));
-                mstPelanggan.setTglLahir((Date) filters.get("tglLahir"));
                 mstPelanggan.setTelepon((String) filters.get("telepon"));
                 kota = (Kota) filters.get("kota");
                 return pelangganRepo.findAll(whereQuery(), request);
@@ -87,7 +86,6 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                 mstPelanggan.setKodePelanggan((String) filters.get("kodePelanggan"));
                 mstPelanggan.setAlamat((String) filters.get("alamat"));
                 mstPelanggan.setJenisKelamin((String) filters.get("jenisKelamin"));
-                mstPelanggan.setTglLahir((Date) filters.get("tglLahir"));
                 mstPelanggan.setTelepon((String) filters.get("telepon"));
                 kota = (Kota) filters.get("kota");
                 return pelangganRepo.count(whereQuery());
@@ -148,6 +146,12 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
         if (mstPelangganCek == null) {
             System.out.println("tambah");
             dalogHeader = "Tambah Pelanggan";
+            MstPelanggan pPelanggan = pelangganRepo.findTop1ByStatusOrderByNamaPelangganAsc(MstPelanggan.Status.ACTIVE);
+            Integer nextPelangganId = pPelanggan != null ? pPelanggan.getPelangganId() + 1 : 1;
+            kodePelanggan = nextPelangganId.toString().length() == 1 ? "P00".concat(nextPelangganId.toString())
+                    : nextPelangganId.toString().length() == 2 ? "P0".concat(nextPelangganId.toString())
+                    : "P".concat(nextPelangganId.toString());
+            mstPelanggan.setKodePelanggan(kodePelanggan);
         } else {
             System.out.println("update");
             dalogHeader = "Ubah Pelanggan";
@@ -178,14 +182,12 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                         pelangganRepo.save(mstPelanggan);
                         String namaPelanggan = mstPelanggan.getNamaPelanggan();
                         String jeniskelamin = mstPelanggan.getJenisKelamin();
-                        Date tglLahir = mstPelanggan.getTglLahir();
                         String telepon = mstPelanggan.getTelepon();
                         String alamat = mstPelanggan.getAlamat();
 //                    Kota kt = mstPelanggan.getKota();
                         mstPelanggan = pl;
                         mstPelanggan.setNamaPelanggan(namaPelanggan);
                         mstPelanggan.setJenisKelamin(jeniskelamin);
-                        mstPelanggan.setTglLahir(tglLahir);
                         mstPelanggan.setTelepon(telepon);
                         mstPelanggan.setAlamat(alamat);
 //                    mstPelanggan.setKota(kt);
@@ -210,14 +212,12 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                         pelangganRepo.save(mstPelanggan);
                         String namaPelanggan = mstPelanggan.getNamaPelanggan();
                         String jeniskelamin = mstPelanggan.getJenisKelamin();
-                        Date tglLahir = mstPelanggan.getTglLahir();
                         String telepon = mstPelanggan.getTelepon();
                         String alamat = mstPelanggan.getAlamat();
 //                    Kota kt = mstPelanggan.getKota();
                         mstPelanggan = pl;
                         mstPelanggan.setNamaPelanggan(namaPelanggan);
                         mstPelanggan.setJenisKelamin(jeniskelamin);
-                        mstPelanggan.setTglLahir(tglLahir);
                         mstPelanggan.setTelepon(telepon);
                         mstPelanggan.setAlamat(alamat);
                     }
